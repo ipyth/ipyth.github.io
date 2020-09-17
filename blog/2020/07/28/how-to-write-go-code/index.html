@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>How to Write Go Code | Website</title><meta property="og:title" content="How to Write Go Code" />
+<meta property="og:description" content="如何编写 Go 代码" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/blog/2020/07/28/how-to-write-go-code/" />
+<meta property="article:published_time" content="2020-07-28T16:58:24+08:00" />
+<meta property="article:modified_time" content="2020-07-28T16:58:24+08:00" />
+<meta itemprop="name" content="How to Write Go Code">
+<meta itemprop="description" content="如何编写 Go 代码">
+<meta itemprop="datePublished" content="2020-07-28T16:58:24+08:00" />
+<meta itemprop="dateModified" content="2020-07-28T16:58:24+08:00" />
+<meta itemprop="wordCount" content="586">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to Write Go Code"/>
+<meta name="twitter:description" content="如何编写 Go 代码"/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page td-blog">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/blog/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">Blogs</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="blog">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-blog20200728how-to-write-go-code" href="/blog/2020/07/28/how-to-write-go-code/">How to Write Go Code</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-blog20200728introducing-operators" href="/blog/2020/07/28/introducing-operators/">Introducing Operators</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-blog20200727prometheus-operator" href="/blog/2020/07/27/prometheus-operator/">Prometheus Operator</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-blog20200725prometheus" href="/blog/2020/07/25/prometheus/">Prometheus</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-blog20200715personal-site" href="/blog/2020/07/15/personal-site/">基于 Hugo &#43; GitHub Pages 快速搭建个人网站</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-blog20200715my-first-post" href="/blog/2020/07/15/my-first-post/">My First Post</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/blog/how-to-write-go-code.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=How%20to%20Write%20Go%20Code" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#介绍">介绍</a></li>
+    <li><a href="#代码组织">代码组织</a></li>
+    <li><a href="#您的第一个程序">您的第一个程序</a>
+      <ul>
+        <li><a href="#从您的模块导入包">从您的模块导入包</a></li>
+        <li><a href="#从远程模块导入包">从远程模块导入包</a></li>
+      </ul>
+    </li>
+    <li><a href="#测试">测试</a></li>
+    <li><a href="#下一步">下一步</a></li>
+    <li><a href="#获得帮助">获得帮助</a></li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5 pr-md-4" role="main">
+            <a class="btn btn-lg -bg-orange td-rss-button d-none d-lg-block" href="/blog/index.xml" target="_blank">
+              RSS <i class="fa fa-rss ml-2 "></i>
+            </a>
+            
+<div class="td-content">
+	<h1>How to Write Go Code</h1>
+	<div class="lead">如何编写 Go 代码</div>
+	<div class="td-byline mb-4">
+		By <b>LH</b> |
+		<time datetime="2020-07-28" class="text-muted">2020-07-28</time>
+	</div>
+	<h2 id="介绍">介绍</h2>
+<p>本文档演示了模块内部简单 Go 软件包的开发，并介绍了 <a href="https://golang.org/cmd/go/">go 工具</a>，这是获取、构建和安装 Go 模块、软件包和命令的标准方法。</p>
+<p>注意：本文档假定您使用的是 Go 1.13 或更高版本，并且未设置 <code>GO111MODULE</code> 环境变量。如果您正在寻找本文档的较早的 pre-modules 版本，它在<a href="https://golang.org/doc/gopath_code.html">这里</a>存档。</p>
+<h2 id="代码组织">代码组织</h2>
+<p>Go 程序被组织到 package 中。<em>package</em> 是同一目录中一起编译的源文件的集合。在一个源文件中定义的函数、类型、变量和常量对于同一 package 中的所有其他源文件可见。</p>
+<p>一个存储库（repository）包含一个或多个模块（module）。<em>模块</em> 是一起发布的相关 Go 软件包的集合。Go 存储库通常仅包含一个模块，位于存储库的根目录。在那里名为 <code>go.mod</code> 的文件声明了<em>模块路径</em>：模块内所有软件包的导入路径前缀。该模块包含了在包含其 <code>go.mod</code> 文件的目录以及该目录的子目录中包含的软件包，直至包含另一个 <code>go.mod</code> 文件（如果有）的下一个子目录。</p>
+<p>请注意，在构建代码之前，无需将代码发布到远程存储库。可以在本地定义模块，而不必属于存储库。但是，像您有一天要发布的代码一样组织代码是一种好习惯。</p>
+<p>每个模块的路径不仅充当其软件包的导入路径前缀，而且还指示 go 命令应该在哪里下载它。例如，为了下载模块 <code>golang.org/x/tools</code>，go 命令将查询 <code>https://golang.org/x/tools</code> 所指示的存储库（<a href="https://golang.org/cmd/go/#hdr-Relative_import_paths">此处</a>有更多说明）。</p>
+<p><em>导入路径</em> 是用于导入软件包的字符串。包的导入路径是其模块路径及其在模块中的子目录。例如，模块 <code>github.com/google/go-cmp</code> 包含了一个在目录 <code>cmp/</code> 中的包。该软件包的导入路径为 <code>github.com/google/go-cmp/cmp</code>。标准库中的软件包没有模块路径前缀。</p>
+<h2 id="您的第一个程序">您的第一个程序</h2>
+<p>要编译和运行一个简单的程序，首先选择一个模块路径（我们将使用 <code>example.com/user/hello</code>），然后创建一个 <code>go.mod</code> 文件声明该路径：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir hello <span style="color:#080;font-style:italic"># 或者，如果它已经在版本控制中，则将其克隆。</span>
+$ <span style="color:#a2f">cd</span> hello
+$ go mod init example.com/user/hello
+go: creating new go.mod: module example.com/user/hello
+$ cat go.mod
+module example.com/user/hello
+
+go 1.14
+</code></pre></div><p>Go 源文件中的第一条语句必须是 <code>package name</code>。可执行命令必须始终使用 <code>package main</code>。</p>
+<p>接下来，在该目录中创建一个名为 <code>hello.go</code> 的文件，其中包含以下Go 代码：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a2f;font-weight:bold">package</span> main
+
+<span style="color:#a2f;font-weight:bold">import</span> <span style="color:#b44">&#34;fmt&#34;</span>
+
+<span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">main</span>() {
+	fmt.<span style="color:#00a000">Println</span>(<span style="color:#b44">&#34;Hello, world.&#34;</span>)
+}
+</code></pre></div><p>现在，您可以使用 <code>go</code> 工具构建并安装该程序：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go install example.com/user/hello
+</code></pre></div><p>此命令构建 <code>hello</code> 命令，生成一个可执行二进制文件。然后，将该二进制文件安装为 <code>$HOME/go/bin/hello</code>（或在Windows下为 <code>%USERPROFILE%\go\bin\hello.exe</code>）。</p>
+<p>安装目录由 <code>GOPATH</code> 和 <code>GOBIN</code> <a href="https://golang.org/cmd/go/#hdr-Environment_variables">环境变量</a>控制。如果设置了 <code>GOBIN</code>，则二进制文件将安装到该目录。如果设置了 <code>GOPATH</code>，二进制文件将安装到 <code>GOPATH</code> 列表中第一个目录的 <code>bin</code> 子目录中。否则，二进制文件将安装到默认 <code>GOPATH</code> 的 <code>bin</code> 子目录（<code>$HOME/go</code> 或 <code>%USERPROFILE%\go</code>）。</p>
+<p>您可以使用 <code>go env</code> 命令为以后的 <code>go</code> 命令便捷地设置环境变量的默认值：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go env -w <span style="color:#b8860b">GOBIN</span><span style="color:#666">=</span>/somewhere/else/bin
+</code></pre></div><p>要取消设置先前由 <code>go env -w</code> 设置的变量，请使用 <code>go env -u</code>：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go env -u GOBIN
+</code></pre></div><p>类似 <code>go install</code> 之类的命令适用于包含当前工作目录的模块的上下文。如果工作目录不在 <code>example.com/user/hello</code> 模块内，则 <code>go install</code> 可能会失败。</p>
+<p>为了方便起见，<code>go</code> 命令接受相对于工作目录的路径，如果没有给出其他路径，则默认使用当前工作目录中的软件包。因此，在我们的工作目录中，以下命令都是等效的：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go install example.com/user/hello
+$ go install .
+$ go install
+</code></pre></div><p>接下来，让我们运行该程序以确保其正常工作。为了更加方便，我们将安装目录添加到 <code>PATH</code> 中，以使运行二进制文件变得容易：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#080;font-style:italic"># Windows 用户应该参考 https://github.com/golang/go/wiki/SettingGOPATH</span>
+<span style="color:#080;font-style:italic"># 来设置 ％PATH％。</span>
+$ <span style="color:#a2f">export</span> <span style="color:#b8860b">PATH</span><span style="color:#666">=</span><span style="color:#b8860b">$PATH</span>:<span style="color:#a2f;font-weight:bold">$(</span>dirname <span style="color:#a2f;font-weight:bold">$(</span>go list -f <span style="color:#b44">&#39;{{.Target}}&#39;</span> .<span style="color:#a2f;font-weight:bold">))</span>
+$ hello
+Hello, world.
+</code></pre></div><p>如果您在使用源代码控制系统，那么现在正是初始化存储库，添加文件并提交第一个更改的好时机。同样，此步骤是可选的：您无需使用源代码控制来编写Go代码。</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git init
+Initialized empty Git repository in /home/user/hello/.git/
+$ git add go.mod hello.go
+$ git commit -m <span style="color:#b44">&#34;initial commit&#34;</span>
+<span style="color:#666">[</span>master <span style="color:#666">(</span>root-commit<span style="color:#666">)</span> 0b4507d<span style="color:#666">]</span> initial commit
+ <span style="color:#666">1</span> file changed, <span style="color:#666">7</span> insertion<span style="color:#666">(</span>+<span style="color:#666">)</span>
+ create mode <span style="color:#666">100644</span> go.mod hello.go
+</code></pre></div><p><code>go</code> 命令通过请求相应的 HTTPS URL 并读取 HTML 响应中嵌入的元数据来查找包含给定模块路径的存储库（请参阅 <code>go help importpath</code>）。许多托管服务已经为包含 Go 代码的存储库提供了该元数据，因此使您的模块可供其他人使用的最简单方法通常是使其模块路径与存储库的URL相匹配。</p>
+<h3 id="从您的模块导入包">从您的模块导入包</h3>
+<p>让我们编写一个 <code>morestrings</code> 包，并在 <code>hello</code> 程序中使用它。首先，为名为 <code>$HOME/hello/morestrings</code> 的包创建一个目录，然后在该目录中创建一个名为 <code>reverse.go</code> 的文件，其中包含以下内容：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#080;font-style:italic">// 包 morestrings 实现了额外的功能来操纵 UTF-8
+</span><span style="color:#080;font-style:italic">// 编码的字符串，超出标准 &#34;strings&#34; 包中提供的字符串。
+</span><span style="color:#080;font-style:italic"></span><span style="color:#a2f;font-weight:bold">package</span> morestrings
+
+<span style="color:#080;font-style:italic">// ReverseRunes 返回其参数字符串，从左向右以符文方向反转。
+</span><span style="color:#080;font-style:italic"></span><span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">ReverseRunes</span>(s <span style="color:#0b0;font-weight:bold">string</span>) <span style="color:#0b0;font-weight:bold">string</span> {
+	r <span style="color:#666">:=</span> []<span style="color:#a2f">rune</span>(s)
+	<span style="color:#a2f;font-weight:bold">for</span> i, j <span style="color:#666">:=</span> <span style="color:#666">0</span>, <span style="color:#a2f">len</span>(r)<span style="color:#666">-</span><span style="color:#666">1</span>; i &lt; <span style="color:#a2f">len</span>(r)<span style="color:#666">/</span><span style="color:#666">2</span>; i, j = i<span style="color:#666">+</span><span style="color:#666">1</span>, j<span style="color:#666">-</span><span style="color:#666">1</span> {
+		r[i], r[j] = r[j], r[i]
+	}
+	<span style="color:#a2f;font-weight:bold">return</span> <span style="color:#a2f">string</span>(r)
+}
+</code></pre></div><p>因为我们的 <code>ReverseRunes</code> 函数以大写字母开头，所以它是 <a href="https://golang.org/ref/spec#Exported_identifiers">exported</a>，并且可以在导入 <code>morestrings</code> 包的其他包中使用。</p>
+<p>让我们测试一下使用 <code>go build</code> 编译该软件包：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ <span style="color:#a2f">cd</span> <span style="color:#b8860b">$HOME</span>/hello/morestrings
+$ go build
+</code></pre></div><p>这不会产生输出文件。而是将已编译的程序包保存在本地构建缓存中。</p>
+<p>确认 <code>morestrings</code> 软件包已生成后，让我们从 <code>hello</code> 程序中使用它。为此，请修改原始的 <code>$HOME/hello/hello.go</code> 以使用 morestrings 包：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a2f;font-weight:bold">package</span> main
+
+<span style="color:#a2f;font-weight:bold">import</span> (
+	<span style="color:#b44">&#34;fmt&#34;</span>
+
+	<span style="color:#b44">&#34;example.com/user/hello/morestrings&#34;</span>
+)
+
+<span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">main</span>() {
+	fmt.<span style="color:#00a000">Println</span>(morestrings.<span style="color:#00a000">ReverseRunes</span>(<span style="color:#b44">&#34;!oG ,olleH&#34;</span>))
+}
+</code></pre></div><p>安装 <code>hello</code> 程序：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go install example.com/user/hello
+</code></pre></div><p>运行新版本的程序，您应该看到一条新的反向的消息：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ hello
+Hello, Go!
+</code></pre></div><h3 id="从远程模块导入包">从远程模块导入包</h3>
+<p>导入路径可以描述如何使用版本控制系统（例如 Git 或 Mercurial）获取软件包源代码。<code>go</code> 工具使用此属性来自动从远程存储库获取软件包。例如，要在您的程序中使用 <code>github.com/google/go-cmp/cmp</code>：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a2f;font-weight:bold">package</span> main
+
+<span style="color:#a2f;font-weight:bold">import</span> (
+	<span style="color:#b44">&#34;fmt&#34;</span>
+
+	<span style="color:#b44">&#34;example.com/user/hello/morestrings&#34;</span>
+	<span style="color:#b44">&#34;github.com/google/go-cmp/cmp&#34;</span>
+)
+
+<span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">main</span>() {
+	fmt.<span style="color:#00a000">Println</span>(morestrings.<span style="color:#00a000">ReverseRunes</span>(<span style="color:#b44">&#34;!oG ,olleH&#34;</span>))
+	fmt.<span style="color:#00a000">Println</span>(cmp.<span style="color:#00a000">Diff</span>(<span style="color:#b44">&#34;Hello World&#34;</span>, <span style="color:#b44">&#34;Hello Go&#34;</span>))
+}
+</code></pre></div><p>当您运行诸如 <code>go install</code>、<code>go build</code> 或 <code>go run</code> 之类的命令时，<code>go</code> 命令将自动下载远程模块并将其版本记录在您的 <code>go.mod</code> 文件中：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go install example.com/user/hello
+go: finding module <span style="color:#a2f;font-weight:bold">for</span> package github.com/google/go-cmp/cmp
+go: downloading github.com/google/go-cmp v0.4.0
+go: found github.com/google/go-cmp/cmp in github.com/google/go-cmp v0.4.0
+$ hello
+Hello, Go!
+  string<span style="color:#666">(</span>
+- 	<span style="color:#b44">&#34;Hello World&#34;</span>,
++ 	<span style="color:#b44">&#34;Hello Go&#34;</span>,
+  <span style="color:#666">)</span>
+$ cat go.mod
+module example.com/user/hello
+
+go 1.14
+
+require github.com/google/go-cmp v0.4.0
+</code></pre></div><p>模块依赖项将自动下载到 <code>GOPATH</code> 环境变量指示的目录的 <code>pkg/mod</code> 子目录中。这些给定版本的模块的下载内容在 <code>require</code> 该版本的所有其他模块之间共享，因此 <code>go</code> 命令将这些文件和目录标记为只读。要删除所有下载的模块，可以通过给 <code>go clean</code> 传递 <code>-modcache</code> 标志：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go clean -modcache
+</code></pre></div><h2 id="测试">测试</h2>
+<p>Go 具有由 <code>go test</code> 命令和 <code>testing</code> 包组成的轻量级测试框架。</p>
+<p>通过创建一个名称以 <code>_test.go</code> 结尾的文件来编写测试，该文件包含名为 <code>TestXXX</code> 且具有 <code>func (t *testing.T)</code> 签名的函数。测试框架运行每个这样的函数；如果该函数调用了诸如 <code>t.Error</code> 或 <code>t.Fail</code> 之类的失败函数，则认为测试已失败。</p>
+<p>通过创建包含以下 Go 代码的文件 <code>$HOME/hello/morestrings/reverse_test.go</code>，将测试添加到 <code>morestrings</code> 包中。</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a2f;font-weight:bold">package</span> morestrings
+
+<span style="color:#a2f;font-weight:bold">import</span> <span style="color:#b44">&#34;testing&#34;</span>
+
+<span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">TestReverseRunes</span>(t <span style="color:#666">*</span>testing.T) {
+	cases <span style="color:#666">:=</span> []<span style="color:#a2f;font-weight:bold">struct</span> {
+		in, want <span style="color:#0b0;font-weight:bold">string</span>
+	}{
+		{<span style="color:#b44">&#34;Hello, world&#34;</span>, <span style="color:#b44">&#34;dlrow ,olleH&#34;</span>},
+		{<span style="color:#b44">&#34;Hello, 世界&#34;</span>, <span style="color:#b44">&#34;界世 ,olleH&#34;</span>},
+		{<span style="color:#b44">&#34;&#34;</span>, <span style="color:#b44">&#34;&#34;</span>},
+	}
+	<span style="color:#a2f;font-weight:bold">for</span> _, c <span style="color:#666">:=</span> <span style="color:#a2f;font-weight:bold">range</span> cases {
+		got <span style="color:#666">:=</span> <span style="color:#00a000">ReverseRunes</span>(c.in)
+		<span style="color:#a2f;font-weight:bold">if</span> got <span style="color:#666">!=</span> c.want {
+			t.<span style="color:#00a000">Errorf</span>(<span style="color:#b44">&#34;ReverseRunes(%q) == %q, want %q&#34;</span>, c.in, got, c.want)
+		}
+	}
+}
+</code></pre></div><p>然后使用 <code>go test</code> 运行测试：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go <span style="color:#a2f">test</span>
+PASS
+ok  	example.com/user/morestrings 0.165s
+</code></pre></div><p>运行 <code>go help test</code> 和查看 <a href="https://golang.org/pkg/testing/">testing package documentation</a> 以获取更多详细信息。</p>
+<h2 id="下一步">下一步</h2>
+<p>订阅 <a href="https://groups.google.com/group/golang-announce">golang-announce</a> 邮件列表，以便在发布新的 Go 稳定版时收到通知。</p>
+<p>有关编写清晰，惯用的 Go 代码的提示，请参见 <a href="https://golang.org/doc/effective_go.html">Effective Go</a>。</p>
+<p>参加 <a href="https://tour.golang.org/">A Tour of Go</a> 以正确地学习 Go 语言。</p>
+<p>请访问<a href="https://golang.org/doc/#articles">文档页面</a>，获取有关 Go 语言及其库和工具的一系列深入文章。</p>
+<h2 id="获得帮助">获得帮助</h2>
+<p>要获得实时帮助，请在社区运行的 <a href="https://gophers.slack.com/messages/general/">gophers Slack server</a> 中询问有用的 gopher（在<a href="https://invite.slack.golangbridge.org/">此处</a>获取邀请）。</p>
+<p>用于讨论 Go 语言的官方邮件列表是 <a href="https://groups.google.com/group/golang-nuts">Go Nuts</a>。</p>
+<p>使用 <a href="https://golang.org/issue">Go 问题跟踪器</a>报告错误。</p>
+
+	
+
+	<ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5">
+  <li>
+    <a href="/blog/2020/07/28/introducing-operators/" class="btn btn-primary "><span class="mr-1">←</span> 上一页</a>
+  </li>
+    <a  class="btn btn-primary  disabled">下一页 <span class="ml-1">→</span></a>
+  </li>
+</ul>
+
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>

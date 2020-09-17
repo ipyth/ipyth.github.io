@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Pod Overview | Website</title><meta property="og:title" content="Pod Overview" />
+<meta property="og:description" content="Pod 是 Kubernetes 对象模型中最小的可部署对象。
+理解 Pods Pod 是 Kubernetes 应用程序的基本执行单元 - 在您创建或部署的 Kubernetes 对象模型中最小和最简单的单元。Pod 表示集群中运行的进程。
+Pod 封装了一个应用程序的容器（或在某些情况下为多个容器），存储资源，唯一的网络标识（IP 地址）以及管理容器容器如何运行的选项。Pod 表示部署的单元：Kubernetes 中应用程序的单个实例，可能由单个容器或紧密耦合并共享资源的少量容器组成。
+Kubernetes 集群中的 Pod 可以通过两种主要方式使用：
+ 运行单个容器的 Pod：”one-container-per-Pod“ 模型是最常见的 Kubernetes 用例。在这种情况下，您可以将 Pod 视为单个容器的包装，而 Kubernetes 则直接管理 Pod，而不是直接管理容器。 运行多个需要协同工作的容器的 Pod：Pod 可能封装了一个应用程序，该应用程序由紧密耦合且需要共享资源的多个并置容器组成。这些并置的容器可能形成一个内聚的服务单元 - 一个容器将文件从共享卷提供给公众，而一个单独的”sidecar“容器则刷新或更新这些文件。Pod 将这些容器和存储资源包装在一起，成为一个可管理的实体。  每个 Pod 旨在运行给定应用程序的单个实例。如果要水平扩展应用程序（通过运行更多实例来提供更多整体资源），则应使用多个 Pod，每个实例一个。在 Kubernetes 中，这通常称为复制 replication。复制的 Pods 通常作为一个组被 workload 资源及其 _controller_ 创建和管理。
+Pods 如何管理多个容器 Pod 被设计为支持多个协作进程（即容器）组成一个内聚的服务单元。Pod 中的容器会自动地共同放置和调度到集群中的同一物理或虚拟机上。这些容器可以共享资源和依赖项，彼此通信，并协调何时以及如何终止他们。
+请注意，在单个 Pod 中对多个共同放置和管理的容器进行分组是一个相对高级的用例。您仅应在容器紧密耦合的特定实例中使用此模式。例如，您可能有一个容器充当共享卷中文件的 Web 服务器，以及一个单独的”sidecar“容器从远程源更新这些文件，如下图所示：
+有些 Pod 具有 init 容器和 app 容器。init 容器在 app 容器启动前运行并完成。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/docs/kubernetes/concepts/workloads/pods/pod-overview/" />
+<meta property="article:published_time" content="2020-07-23T16:43:26+08:00" />
+<meta property="article:modified_time" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="name" content="Pod Overview">
+<meta itemprop="description" content="Pod 是 Kubernetes 对象模型中最小的可部署对象。
+理解 Pods Pod 是 Kubernetes 应用程序的基本执行单元 - 在您创建或部署的 Kubernetes 对象模型中最小和最简单的单元。Pod 表示集群中运行的进程。
+Pod 封装了一个应用程序的容器（或在某些情况下为多个容器），存储资源，唯一的网络标识（IP 地址）以及管理容器容器如何运行的选项。Pod 表示部署的单元：Kubernetes 中应用程序的单个实例，可能由单个容器或紧密耦合并共享资源的少量容器组成。
+Kubernetes 集群中的 Pod 可以通过两种主要方式使用：
+ 运行单个容器的 Pod：”one-container-per-Pod“ 模型是最常见的 Kubernetes 用例。在这种情况下，您可以将 Pod 视为单个容器的包装，而 Kubernetes 则直接管理 Pod，而不是直接管理容器。 运行多个需要协同工作的容器的 Pod：Pod 可能封装了一个应用程序，该应用程序由紧密耦合且需要共享资源的多个并置容器组成。这些并置的容器可能形成一个内聚的服务单元 - 一个容器将文件从共享卷提供给公众，而一个单独的”sidecar“容器则刷新或更新这些文件。Pod 将这些容器和存储资源包装在一起，成为一个可管理的实体。  每个 Pod 旨在运行给定应用程序的单个实例。如果要水平扩展应用程序（通过运行更多实例来提供更多整体资源），则应使用多个 Pod，每个实例一个。在 Kubernetes 中，这通常称为复制 replication。复制的 Pods 通常作为一个组被 workload 资源及其 _controller_ 创建和管理。
+Pods 如何管理多个容器 Pod 被设计为支持多个协作进程（即容器）组成一个内聚的服务单元。Pod 中的容器会自动地共同放置和调度到集群中的同一物理或虚拟机上。这些容器可以共享资源和依赖项，彼此通信，并协调何时以及如何终止他们。
+请注意，在单个 Pod 中对多个共同放置和管理的容器进行分组是一个相对高级的用例。您仅应在容器紧密耦合的特定实例中使用此模式。例如，您可能有一个容器充当共享卷中文件的 Web 服务器，以及一个单独的”sidecar“容器从远程源更新这些文件，如下图所示：
+有些 Pod 具有 init 容器和 app 容器。init 容器在 app 容器启动前运行并完成。">
+<meta itemprop="datePublished" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="dateModified" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="wordCount" content="234">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pod Overview"/>
+<meta name="twitter:description" content="Pod 是 Kubernetes 对象模型中最小的可部署对象。
+理解 Pods Pod 是 Kubernetes 应用程序的基本执行单元 - 在您创建或部署的 Kubernetes 对象模型中最小和最简单的单元。Pod 表示集群中运行的进程。
+Pod 封装了一个应用程序的容器（或在某些情况下为多个容器），存储资源，唯一的网络标识（IP 地址）以及管理容器容器如何运行的选项。Pod 表示部署的单元：Kubernetes 中应用程序的单个实例，可能由单个容器或紧密耦合并共享资源的少量容器组成。
+Kubernetes 集群中的 Pod 可以通过两种主要方式使用：
+ 运行单个容器的 Pod：”one-container-per-Pod“ 模型是最常见的 Kubernetes 用例。在这种情况下，您可以将 Pod 视为单个容器的包装，而 Kubernetes 则直接管理 Pod，而不是直接管理容器。 运行多个需要协同工作的容器的 Pod：Pod 可能封装了一个应用程序，该应用程序由紧密耦合且需要共享资源的多个并置容器组成。这些并置的容器可能形成一个内聚的服务单元 - 一个容器将文件从共享卷提供给公众，而一个单独的”sidecar“容器则刷新或更新这些文件。Pod 将这些容器和存储资源包装在一起，成为一个可管理的实体。  每个 Pod 旨在运行给定应用程序的单个实例。如果要水平扩展应用程序（通过运行更多实例来提供更多整体资源），则应使用多个 Pod，每个实例一个。在 Kubernetes 中，这通常称为复制 replication。复制的 Pods 通常作为一个组被 workload 资源及其 _controller_ 创建和管理。
+Pods 如何管理多个容器 Pod 被设计为支持多个协作进程（即容器）组成一个内聚的服务单元。Pod 中的容器会自动地共同放置和调度到集群中的同一物理或虚拟机上。这些容器可以共享资源和依赖项，彼此通信，并协调何时以及如何终止他们。
+请注意，在单个 Pod 中对多个共同放置和管理的容器进行分组是一个相对高级的用例。您仅应在容器紧密耦合的特定实例中使用此模式。例如，您可能有一个容器充当共享卷中文件的 Web 服务器，以及一个单独的”sidecar“容器从远程源更新这些文件，如下图所示：
+有些 Pod 具有 init 容器和 app 容器。init 容器在 app 容器启动前运行并完成。"/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Documentation</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docs">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Kubernetes 文档</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetes">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Concepts</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconcepts">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/overview/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Overview</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsoverview">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewkubenetes-components" href="/docs/kubernetes/concepts/overview/kubenetes-components/">Kubernetes Components</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewwhat-is-kubernetes" href="/docs/kubernetes/concepts/overview/what-is-kubernetes/">What is Kubernetes?</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/cluster-architecture/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Cluster Architecture</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptscluster-architecture">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptscluster-architecturecontrollers" href="/docs/kubernetes/concepts/cluster-architecture/controllers/">Controllers</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Workloads</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloads">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/pods/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">Pods</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloadspods">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-docskubernetesconceptsworkloadspodspod-overview" href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspods" href="/docs/kubernetes/concepts/workloads/pods/pods/">Pods</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-lifecycle" href="/docs/kubernetes/concepts/workloads/pods/pod-lifecycle/">Pod Lifecycle</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsinit-containers" href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-preset" href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-topology-spread-constraints" href="/docs/kubernetes/concepts/workloads/pods/pod-topology-spread-constraints/">Pod 拓扑扩展约束</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsdisruptions" href="/docs/kubernetes/concepts/workloads/pods/disruptions/">干扰（Disruptions）</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Prometheus</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheus">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheusintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionoverview" href="/docs/prometheus/introduction/overview/">Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfirst-steps" href="/docs/prometheus/introduction/first-steps/">First Steps</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductioncomparison-to-alternatives" href="/docs/prometheus/introduction/comparison-to-alternatives/">Comparison to Alternatives</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfaq" href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Envoy</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoy">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoyintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsenvoyintroductionwhat-is-envoy" href="/docs/envoy/introduction/what-is-envoy/">What is Envoy</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Jenkins</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkins">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/user-handbook/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">User Handbook</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkinsuser-handbook">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookinstalling-jenkins" href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookoverview" href="/docs/jenkins/user-handbook/overview/">User Handbook Overview</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/docs/kubernetes/concepts/workloads/pods/pod-overview.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=Pod%20Overview" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#理解-pods">理解 Pods</a>
+      <ul>
+        <li><a href="#pods-如何管理多个容器">Pods 如何管理多个容器</a></li>
+      </ul>
+    </li>
+    <li><a href="#working-with-pods">Working with Pods</a>
+      <ul>
+        <li><a href="#pods-and-controllers">Pods and controllers</a></li>
+      </ul>
+    </li>
+    <li><a href="#pod-templates">Pod templates</a></li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+            
+  
+
+            <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/">Documentation</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/">Kubernetes 文档</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/">Concepts</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/">Workloads</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/pods/">Pods</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+</li>
+
+	</ol>
+</nav	>
+
+            
+<div class="td-content">
+	<h1>Pod Overview</h1>
+    
+	       
+	<p>Pod 是 Kubernetes 对象模型中最小的可部署对象。</p>
+<h2 id="理解-pods">理解 Pods</h2>
+<p>Pod 是 Kubernetes 应用程序的基本执行单元 - 在您创建或部署的 Kubernetes 对象模型中最小和最简单的单元。Pod 表示集群中运行的进程。</p>
+<p>Pod 封装了一个应用程序的容器（或在某些情况下为多个容器），存储资源，唯一的网络标识（IP 地址）以及管理容器容器如何运行的选项。Pod 表示部署的单元：Kubernetes 中应用程序的单个实例，可能由单个容器或紧密耦合并共享资源的少量容器组成。</p>
+<p>Kubernetes 集群中的 Pod 可以通过两种主要方式使用：</p>
+<ul>
+<li>运行单个容器的 Pod：”one-container-per-Pod“ 模型是最常见的 Kubernetes 用例。在这种情况下，您可以将 Pod 视为单个容器的包装，而 Kubernetes 则直接管理 Pod，而不是直接管理容器。</li>
+<li>运行多个需要协同工作的容器的 Pod：Pod 可能封装了一个应用程序，该应用程序由紧密耦合且需要共享资源的多个并置容器组成。这些并置的容器可能形成一个内聚的服务单元 - 一个容器将文件从共享卷提供给公众，而一个单独的”sidecar“容器则刷新或更新这些文件。Pod 将这些容器和存储资源包装在一起，成为一个可管理的实体。</li>
+</ul>
+<p>每个 Pod 旨在运行给定应用程序的单个实例。如果要水平扩展应用程序（通过运行更多实例来提供更多整体资源），则应使用多个 Pod，每个实例一个。在 Kubernetes 中，这通常称为复制 replication。复制的 Pods 通常作为一个组被 workload 资源及其 <code>_controller_</code>  创建和管理。</p>
+<h3 id="pods-如何管理多个容器">Pods 如何管理多个容器</h3>
+<p>Pod 被设计为支持多个协作进程（即容器）组成一个内聚的服务单元。Pod 中的容器会自动地共同放置和调度到集群中的同一物理或虚拟机上。这些容器可以共享资源和依赖项，彼此通信，并协调何时以及如何终止他们。</p>
+<p>请注意，在单个 Pod 中对多个共同放置和管理的容器进行分组是一个相对高级的用例。您仅应在容器紧密耦合的特定实例中使用此模式。例如，您可能有一个容器充当共享卷中文件的 Web 服务器，以及一个单独的”sidecar“容器从远程源更新这些文件，如下图所示：</p>
+<p><img src="https://d33wubrfki0l68.cloudfront.net/aecab1f649bc640ebef1f05581bfcc91a48038c4/728d6/images/docs/pod.svg" alt="pod"></p>
+<p>有些 Pod 具有 init 容器和 app 容器。init 容器在 app 容器启动前运行并完成。</p>
+<p>Pod 为其组成的容器提供两种共享资源：networking 和 storage。</p>
+<h4 id="networking">Networking</h4>
+<p>每个 Pod 为每个地址族分配一个唯一的 IP 地址。Pod 中的每个容器都共享这个网络名称空间，包括 IP 地址和网络端口。在同一个 Pod 中的容器可以使用 <code>localhost</code> 相互通信。当 Pod 中的容器与 Pod 外部的实体进行通信时，它们必须协调如何使用共享的网络资源（例如端口）。</p>
+<h4 id="storage">Storage</h4>
+<p>一个 Pod 可以指定一组共享存储卷。这个 Pod 中的所有容器都可以访问共享卷，从而使这些容器可以共享数据。Volumes 还允许 Pod 中的持久化数据保存下来，以防其中的容器之一需要重新启动。</p>
+<h2 id="working-with-pods">Working with Pods</h2>
+<p>您很少会直接在 Kubernetes 中创建单个 Pod &ndash; 甚至是单身 Pod。这是因为 Pod 被设计为相对短暂的一次性的实体。当一个 Pod 被创建时（直接由您创建，或者由 <em>controller</em> 间接创建），它将被安排在集群中的 Node 上运行。Pod 会保留在该节点上，直到进程终止，Pod 对象被删除，Pod 由于缺少资源而被驱逐，或节点发生故障为止。</p>
+<blockquote>
+<p>说明：不要将重新启动 Pod 中的容器与重新启动 Pod 混淆。Pod 不是进程，而是用于运行容器的环境。Pod 会一直存在直到被删除。</p>
+</blockquote>
+<p>Pod 本身无法自我修复。如果 Pod 被调度到发生故障的节点，或者调度操作本身失败，Pod 将被删除。同样，由于缺乏资源或 Node 维护，Pod 无法幸免。Kubernetes 使用称为控制器的更高级的抽象来处理管理相对一次性的 Pod 实例的工作。因此，虽然可以直接使用 Pod，但在 Kubernetes 中使用控制器来管理 Pod 更为常见。</p>
+<h3 id="pods-and-controllers">Pods and controllers</h3>
+<p>您可以使用工作负载资源为您创建和管理多个 Pod。资源的控制器处理 Pod 失败时的复制和回滚以及自动修复。例如，如果某个节点发生故障，则控制器会注意到该节点上的 Pod 已停止工作，并创建了一个替换 Pod。调度程序将替换的 Pod 放置到健康的节点上。</p>
+<p>以下是管理一个或多个 Pod 的工作负载资源的一些示例：</p>
+<ul>
+<li>Deployment</li>
+<li>StatefulSet</li>
+<li>DaemonSet</li>
+</ul>
+<h2 id="pod-templates">Pod templates</h2>
+<p>工作负载资源的控制器从 Pod 模板创建 Pod，并代表您管理这些 Pod。 PodTemplates 是用于创建 Pod 的规范，并且包含在工作负载资源（如 Deployments，Jobs 和 DaemonSets）中。</p>
+<p>工作负载资源的每个控制器都使用工作负载对象内部的 PodTemplate 来创建实际的 Pod。PodTemplate 是用于运行应用程序的任何工作负载资源的期望状态的一部分。</p>
+<p>下面的示例是一个简单的 Job 的清单，带有一个启动一个容器的 <code>template</code>。该 Pod 中的容器会打印一条消息，然后暂停。</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#a2f;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>batch/v1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Job<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>hello<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">template</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#080;font-style:italic"># This is the pod template</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#a2f;font-weight:bold">containers</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>hello<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#a2f;font-weight:bold">image</span>:<span style="color:#bbb"> </span>busybox<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#a2f;font-weight:bold">command</span>:<span style="color:#bbb"> </span>[<span style="color:#b44">&#39;sh&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;-c&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;echo &#34;Hello, Kubernetes!&#34; &amp;&amp; sleep 3600&#39;</span>]<span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#a2f;font-weight:bold">restartPolicy</span>:<span style="color:#bbb"> </span>OnFailure<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#080;font-style:italic"># The pod template ends here</span><span style="color:#bbb">
+</span></code></pre></div><p>修改 pod 模板或切换到新的 pod 模板对已存在的 Pod 无效。 Pod 不会直接接收模板更新。而是创建一个新的 Pod 以匹配修订后的 Pod 模板。</p>
+<p>例如，Deployment 控制器可确保正在运行的 Pod 与当前 Pod 模板匹配。如果模板已更新，则控制器必须删除现有的 Pod 并根据更新的模板创建新的 Pod。每个工作负载控制器都实现自己的规则，以处理 Pod 模板的更改。</p>
+<p>在节点上，kubelet 不会直接观察或管理有关 pod 模板和更新的任何详细信息。这些细节被抽象掉了。关注点的抽象和分离简化了系统语义，并使得在不更改现有代码的情况下扩展集群的行为变得可行。</p>
+
+	
+	
+	<div class="text-muted mt-5 pt-3 border-top">最后修改 2020-07-23 16:43PM Thu
+</div>
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>

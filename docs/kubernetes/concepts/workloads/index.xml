@@ -1,0 +1,31 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Website – Workloads</title>
+    <link>/docs/kubernetes/concepts/workloads/</link>
+    <description>Recent content in Workloads on Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 23 Jul 2020 16:34:21 +0800</lastBuildDate>
+    
+	  <atom:link href="/docs/kubernetes/concepts/workloads/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Docs: Pods</title>
+      <link>/docs/kubernetes/concepts/workloads/pods/</link>
+      <pubDate>Thu, 23 Jul 2020 16:43:26 +0800</pubDate>
+      
+      <guid>/docs/kubernetes/concepts/workloads/pods/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

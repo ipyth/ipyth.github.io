@@ -1,0 +1,1224 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Installing Jenkins | Website</title><meta property="og:title" content="Installing Jenkins" />
+<meta property="og:description" content="安装 Jenkins 本节的步骤适用于在单台/本地计算机上的 Jenkins 新安装。
+Jenkins 通常使用内置的 Java Servlet 容器/应用服务器（Jetty）在其自己的进程中作为独立应用程序运行。
+Jenkins 也可以在其他 Java servlet 容器（例如 Apache Tomcat 或 GlassFish）中作为 servlet 运行。但是，设置这些类型的安装的说明超出了本页的范围。
+**注意：**尽管此页面侧重于 Jenkins 的本地安装，但此内容也可用于帮助在生产环境中设置 Jenkins。
+系统要求 最低硬件要求：
+ 256 MB 可用内存 1 GB 可用磁盘空间（如果将 Jenkins 作为 Docker 容器运行，建议最小为 10 GB）  为小团队推荐的硬件配置:
+ 1 GB &#43; 可用内存 50 GB&#43; 可用磁盘空间  全面的硬件建议：
+ 硬件：请参阅 硬件建议 页面  软件要求：
+ Java：请参阅 Java 要求 页面 Web 浏览器：请参阅 Web 浏览器兼容性 页面 对于 Windows 操作系统：Windows 支持策略  安装平台 本节介绍如何在不同的平台和操作系统上安装/运行 Jenkins。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/docs/jenkins/user-handbook/installing-jenkins/" />
+<meta property="article:published_time" content="2020-07-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-07-19T00:00:00+00:00" />
+<meta itemprop="name" content="Installing Jenkins">
+<meta itemprop="description" content="安装 Jenkins 本节的步骤适用于在单台/本地计算机上的 Jenkins 新安装。
+Jenkins 通常使用内置的 Java Servlet 容器/应用服务器（Jetty）在其自己的进程中作为独立应用程序运行。
+Jenkins 也可以在其他 Java servlet 容器（例如 Apache Tomcat 或 GlassFish）中作为 servlet 运行。但是，设置这些类型的安装的说明超出了本页的范围。
+**注意：**尽管此页面侧重于 Jenkins 的本地安装，但此内容也可用于帮助在生产环境中设置 Jenkins。
+系统要求 最低硬件要求：
+ 256 MB 可用内存 1 GB 可用磁盘空间（如果将 Jenkins 作为 Docker 容器运行，建议最小为 10 GB）  为小团队推荐的硬件配置:
+ 1 GB &#43; 可用内存 50 GB&#43; 可用磁盘空间  全面的硬件建议：
+ 硬件：请参阅 硬件建议 页面  软件要求：
+ Java：请参阅 Java 要求 页面 Web 浏览器：请参阅 Web 浏览器兼容性 页面 对于 Windows 操作系统：Windows 支持策略  安装平台 本节介绍如何在不同的平台和操作系统上安装/运行 Jenkins。">
+<meta itemprop="datePublished" content="2020-07-19T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-07-19T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3068">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Installing Jenkins"/>
+<meta name="twitter:description" content="安装 Jenkins 本节的步骤适用于在单台/本地计算机上的 Jenkins 新安装。
+Jenkins 通常使用内置的 Java Servlet 容器/应用服务器（Jetty）在其自己的进程中作为独立应用程序运行。
+Jenkins 也可以在其他 Java servlet 容器（例如 Apache Tomcat 或 GlassFish）中作为 servlet 运行。但是，设置这些类型的安装的说明超出了本页的范围。
+**注意：**尽管此页面侧重于 Jenkins 的本地安装，但此内容也可用于帮助在生产环境中设置 Jenkins。
+系统要求 最低硬件要求：
+ 256 MB 可用内存 1 GB 可用磁盘空间（如果将 Jenkins 作为 Docker 容器运行，建议最小为 10 GB）  为小团队推荐的硬件配置:
+ 1 GB &#43; 可用内存 50 GB&#43; 可用磁盘空间  全面的硬件建议：
+ 硬件：请参阅 硬件建议 页面  软件要求：
+ Java：请参阅 Java 要求 页面 Web 浏览器：请参阅 Web 浏览器兼容性 页面 对于 Windows 操作系统：Windows 支持策略  安装平台 本节介绍如何在不同的平台和操作系统上安装/运行 Jenkins。"/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Documentation</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docs">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Kubernetes 文档</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetes">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Concepts</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconcepts">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/overview/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Overview</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsoverview">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewkubenetes-components" href="/docs/kubernetes/concepts/overview/kubenetes-components/">Kubernetes Components</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewwhat-is-kubernetes" href="/docs/kubernetes/concepts/overview/what-is-kubernetes/">What is Kubernetes?</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/cluster-architecture/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Cluster Architecture</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptscluster-architecture">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptscluster-architecturecontrollers" href="/docs/kubernetes/concepts/cluster-architecture/controllers/">Controllers</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Workloads</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsworkloads">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/pods/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Pods</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsworkloadspods">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-overview" href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspods" href="/docs/kubernetes/concepts/workloads/pods/pods/">Pods</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-lifecycle" href="/docs/kubernetes/concepts/workloads/pods/pod-lifecycle/">Pod Lifecycle</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsinit-containers" href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-preset" href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-topology-spread-constraints" href="/docs/kubernetes/concepts/workloads/pods/pod-topology-spread-constraints/">Pod 拓扑扩展约束</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsdisruptions" href="/docs/kubernetes/concepts/workloads/pods/disruptions/">干扰（Disruptions）</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Prometheus</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheus">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheusintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionoverview" href="/docs/prometheus/introduction/overview/">Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfirst-steps" href="/docs/prometheus/introduction/first-steps/">First Steps</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductioncomparison-to-alternatives" href="/docs/prometheus/introduction/comparison-to-alternatives/">Comparison to Alternatives</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfaq" href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Envoy</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoy">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoyintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsenvoyintroductionwhat-is-envoy" href="/docs/envoy/introduction/what-is-envoy/">What is Envoy</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Jenkins</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docsjenkins">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/user-handbook/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">User Handbook</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docsjenkinsuser-handbook">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-docsjenkinsuser-handbookinstalling-jenkins" href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookoverview" href="/docs/jenkins/user-handbook/overview/">User Handbook Overview</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/docs/jenkins/user-handbook/installing-jenkins.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=Installing%20Jenkins" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#系统要求">系统要求</a></li>
+    <li><a href="#安装平台">安装平台</a>
+      <ul>
+        <li><a href="#docker">Docker</a></li>
+      </ul>
+    </li>
+    <li><a href="#post-installation-setup-wizard">Post-installation setup wizard</a>
+      <ul>
+        <li><a href="#unlocking-jenkins">Unlocking Jenkins</a></li>
+        <li><a href="#customizing-jenkins-with-plugins">Customizing Jenkins with plugins</a></li>
+        <li><a href="#creating-the-first-administrator-user">Creating the first administrator user</a></li>
+      </ul>
+    </li>
+    <li><a href="#offline-jenkins-installation">Offline Jenkins Installation</a></li>
+    <li><a href="#jenkins-parameters">Jenkins Parameters</a>
+      <ul>
+        <li><a href="#networking-parameters">Networking parameters</a></li>
+        <li><a href="#miscellaneous-parameters">Miscellaneous parameters</a></li>
+        <li><a href="#jenkins-properties">Jenkins properties</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuring-http">Configuring HTTP</a>
+      <ul>
+        <li><a href="#https-with-an-existing-certificate">HTTPS with an existing certificate</a></li>
+        <li><a href="#using-http2">Using HTTP/2</a></li>
+        <li><a href="#https-certificates-with-windows">HTTPS certificates with Windows</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+            
+  
+
+            <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/">Documentation</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/jenkins/">Jenkins</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/jenkins/user-handbook/">User Handbook</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+</li>
+
+	</ol>
+</nav	>
+
+            
+<div class="td-content">
+	<h1>Installing Jenkins</h1>
+    
+	       
+	<h1 id="安装-jenkins">安装 Jenkins</h1>
+<p>本节的步骤适用于在单台/本地计算机上的 Jenkins 新安装。</p>
+<p>Jenkins 通常使用内置的 <a href="https://stackoverflow.com/questions/7213541/what-is-java-servlet">Java Servlet</a> 容器/应用服务器（<a href="https://www.eclipse.org/jetty/">Jetty</a>）在其自己的进程中作为独立应用程序运行。</p>
+<p>Jenkins 也可以在其他 Java servlet 容器（例如 <a href="https://tomcat.apache.org/">Apache Tomcat</a> 或 <a href="https://javaee.github.io/glassfish/">GlassFish</a>）中作为 servlet 运行。但是，设置这些类型的安装的说明超出了本页的范围。</p>
+<p>**注意：**尽管此页面侧重于 Jenkins 的本地安装，但此内容也可用于帮助在生产环境中设置 Jenkins。</p>
+<h2 id="系统要求">系统要求</h2>
+<p>最低硬件要求：</p>
+<ul>
+<li>256 MB 可用内存</li>
+<li>1 GB 可用磁盘空间（如果将 Jenkins 作为 Docker 容器运行，建议最小为 10 GB）</li>
+</ul>
+<p>为小团队推荐的硬件配置:</p>
+<ul>
+<li>1 GB + 可用内存</li>
+<li>50 GB+ 可用磁盘空间</li>
+</ul>
+<p>全面的硬件建议：</p>
+<ul>
+<li>硬件：请参阅 <a href="https://www.jenkins.io/doc/book/hardware-recommendations/#hardware-recommendations">硬件建议 </a>页面</li>
+</ul>
+<p>软件要求：</p>
+<ul>
+<li>Java：请参阅 <a href="https://www.jenkins.io/doc/administration/requirements/java">Java 要求</a> 页面</li>
+<li>Web 浏览器：请参阅 <a href="https://www.jenkins.io/doc/administration/requirements/web-browsers">Web 浏览器兼容性</a> 页面</li>
+<li>对于 Windows 操作系统：<a href="https://www.jenkins.io/doc/administration/requirements/windows">Windows 支持策略</a></li>
+</ul>
+<h2 id="安装平台">安装平台</h2>
+<p>本节介绍如何在不同的平台和操作系统上安装/运行 Jenkins。</p>
+<h3 id="docker">Docker</h3>
+<p><a href="https://docs.docker.com/engine/docker-overview/">Docker</a> 是一个用于在称为“容器”（或 Docker 容器）的隔离环境中运行应用程序的平台。诸如 Jenkins 之类的应用程序可以作为只读“镜像”（或 Docker 镜像）下载，每个映像都作为容器在 Docker 中运行。Docker 容器实际上是 Docker 镜像的“运行实例”。从这个角度来看，镜像或多或少地被永久地存储（即：只要镜像更新发布），而容器被临时存储。在 Docker 文档的入门指南，<a href="https://docs.docker.com/get-started/">Getting Started, Part 1: Orientation and setup</a> 页面中阅读有关这些概念的更多信息。</p>
+<p>Docker 的基本平台和容器设计意味着可以在任何受支持的操作系统（macOS、Linux 和 Windows）或也运行着 Docker 的云服务（AWS 和 Azure）上运行单个 Docker 映像（对于任何给定的应用程序，如 Jenkins）。</p>
+<h4 id="安装-docker">安装 Docker</h4>
+<p>要将 Docker 安装在您的操作系统上，请访问 <a href="https://store.docker.com/search?type=edition&amp;offering=community">Docker store</a> 网站，然后单击适用于您的操作系统或云服务的 <strong>Docker Community Edition</strong> 框。按照其网站上的安装说明进行操作。</p>
+<p>Jenkins 也可以在 Docker 企业版上运行，您可以通过 Docker 商店网站上的 <strong>Docker EE</strong> 进行访问。</p>
+<blockquote>
+<p>如果要在基于 Linux 的操作系统上安装 Docker，请确保配置 Docker，以便可以以非 root 用户身份对其进行管理。请在 Docker 文档的 Docker 的 <a href="https://docs.docker.com/engine/installation/linux/linux-postinstall/">Linux 安装后步骤</a> 页面中阅读有关此内容的更多信息。该页面还包含有关如何配置 Docker 开机启动的信息。</p>
+</blockquote>
+<h4 id="在-docker-中下载并运行-jenkins">在 Docker 中下载并运行 Jenkins</h4>
+<p>Jenkins 有多个可用的 Docker 镜像。</p>
+<p>推荐使用的 Docker 镜像是 <a href="https://hub.docker.com/r/jenkinsci/blueocean/"><code>jenkinsci/blueocean</code> 镜像</a>（来自 <a href="https://hub.docker.com/">Docker Hub 存储库</a>）。该镜像包含了与所有 Blue Ocean 插件和功能捆绑在一起的 Jenkins 的当前长期支持（LTS）版本（可以投入生产使用）。这意味着您不需要单独安装 Blue Ocean 插件。</p>
+<blockquote>
+<p>每次发布新版 Blue Ocean 时，都会发布新的 <code>jenkinsci/blueocean</code> 镜像。您可以在 <a href="https://hub.docker.com/r/jenkinsci/blueocean/tags/">tags</a> 页面上看到 <code>jenkinsci/blueocean</code> 镜像以前发布的版本列表。</p>
+<p>您还可以使用其他 Jenkins Docker 映像（在 Docker Hub 上可通过 <a href="https://hub.docker.com/r/jenkins/jenkins/"><code>jenkins/jenkins</code></a> 访问）。但是，这些不会随 Blue Ocean的发布而提供，需要通过 Jenkins 中的 <a href="https://www.jenkins.io/zh/doc/book/managing"><strong>Manage Jenkins</strong></a> &gt; <a href="https://www.jenkins.io/zh/doc/book/managing/plugins"><strong>Manage Plugins</strong></a> 页面进行安装。 在 <a href="https://www.jenkins.io/zh/doc/book/blueocean/getting-started">Blue Ocean 入门</a> 中了解更多信息。</p>
+</blockquote>
+<h5 id="在-macos-和-linux-上">在 macOS 和 Linux 上</h5>
+<ol>
+<li>
+<p>打开一个终端窗口。</p>
+</li>
+<li>
+<p>使用以下 <code>docker network create</code> 命令在 Docker 中创建 <a href="https://docs.docker.com/network/bridge/">桥接网络</a>：</p>
+<pre><code>docker network create jenkins
+</code></pre></li>
+<li>
+<p>使用以下 <code>docker volume create</code> 命令创建以下存储卷，这些存储卷用来共享连接到 Docker 守护程序所需的 Docker 客户端 TLS 证书，和持久化 Jenkins 数据：</p>
+<pre><code>docker volume create jenkins-docker-certs
+docker volume create jenkins-data
+</code></pre></li>
+<li>
+<p>为了在 Jenkins 节点内执行 Docker 命令，请使用以下 <a href="https://docs.docker.com/engine/reference/commandline/container_run/"><code>docker container run</code></a> 命令下载并运行 <code>docker:dind</code> Docker 镜像：</p>
+<pre><code>docker container run \
+  --name jenkins-docker \
+  --rm \
+  --detach \
+  --privileged \
+  --network jenkins \
+  --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 \
+  docker:dind
+</code></pre><p>参数说明：</p>
+<ul>
+<li><code>--name jenkins-docker</code>：（可选）指定用于运行镜像的 Docker 容器名称。默认情况下，Docker 将为容器生成一个唯一的名称。</li>
+<li><code>--rm</code>：（可选）关闭时自动删除 Docker 容器（Docker 镜像的实例）。它包含当被下面描述的 <code>jenkinsci/blueocean</code> 容器调用时 Docker 使用的 Docker 镜像缓存。</li>
+<li><code>--detach</code>：（可选）在后台运行 Docker 容器。此实例可以稍后通过运行 <code>docker container stop jenkins-docker</code> 停止，并可以通过 <code>docker container start jenkins-docker</code> 再次启动。有关更多容器管理命令，请参阅 <a href="https://docs.docker.com/engine/reference/commandline/container/"><code>docker container</code></a>。</li>
+<li><code>--privileged</code>：当前在 Docker 中运行 Docker 需要特权访问才能正常运行。使用较新的 Linux 内核版本可以放宽此要求。</li>
+<li><code>--network jenkins</code>：这对应于先前步骤中创建的网络。</li>
+<li><code>--network-alias docker</code>：使 Docker 容器中的 Docker 在 <code>jenkins</code> 网络中作为主机名 <code>docker</code> 可用。</li>
+<li><code>--env DOCKER_TLS_CERTDIR=/certs</code>：在 Docker 服务器中启用 TLS 的使用。由于使用了特权容器，因此建议这样做，尽管它需要使用下面描述的共享存储卷。此环境变量控制被管理的 Docker TLS 证书的根目录。</li>
+<li><code>--volume jenkins-docker-certs:/certs/client</code>：将容器内的 <code>/certs/client</code> 目录映射到上面创建的名为 <code>jenkins-docker-certs</code> 的 Docker 存储卷。</li>
+<li><code>--volume jenkins-data:/var/jenkins_home</code>：将容器内的 <code>/var/jenkins_home</code> 目录映射到上面创建的名为 <code>jenkins-data</code> 的Docker 存储卷。这将允许此 Docker容器中的 Docker 守护程序控制的其他 Docker 容器从 Jenkins 装载数据。</li>
+<li><code>--publish 2376:2376</code>：（可选）公开主机上的 Docker 守护程序端口。这对于在主机上执行 <code>docker</code> 命令来控制此内部 Docker 守护程序很有用。</li>
+<li><code>docker:dind</code>：<code>docker:dind</code> 镜像本身。可以使用以下命令在运行之前下载此映像：<code>docker image pull docker:dind</code>。</li>
+</ul>
+</li>
+<li>
+<p>下载 <code>jenkinsci/blueocean</code> 映像，并使用以下 <a href="https://docs.docker.com/engine/reference/commandline/container_run/"><code>docker container run</code></a> 命令将其作为容器在 Docker 中运行：</p>
+<pre><code>docker container run \
+  --name jenkins-blueocean \
+  --rm \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  jenkinsci/blueocean
+</code></pre><p>参数说明：</p>
+<ul>
+<li><code>--name jenkins-blueocean</code>：（可选）为 <code>jenkinsci/blueocean</code> Docker 镜像的此实例指定 Docker 容器名称。这使得后续的 <code>docker container</code> 命令更易于引用它。</li>
+<li><code>--rm</code>：（可选）关闭时自动删除 Docker 容器（这是下面的 <code>jenkinsci/blueocean</code> 镜像的实例）。如果您需要退出 Jenkins，这可以保持整洁。</li>
+<li><code>--detach</code>：（可选）在后台运行 <code>jenkinsci/blueocean</code> 容器（即“detached”模式）并输出容器 ID。如果未指定此选项，则在终端窗口中输出此容器的运行中的 Docker 日志。</li>
+<li><code>--network jenkins</code>：将此容器连接到先前步骤中定义的 <code>jenkins</code> 网络。这使得上一步中的 Docker 守护程序可以通过主机名 <code>docker</code> 应用于此 Jenkins 容器。</li>
+<li><code>--env DOCKER_HOST=tcp://docker:2376</code>：指定 <code>docker</code>、 <code>docker-compose</code> 和其他 Docker 工具用于连接上一步中的 Docker 守护程序的环境变量。</li>
+<li><code>--publish 8080:8080</code>：将 <code>jenkinsci/blueocean</code> 容器的端口 8080映射（即“发布”）到主机上的端口 8080。第一个数字表示主机上的端口，而最后一个数字表示容器的端口。因此，如果为该选项指定 <code>-p 49000:8080</code>，则将通过主机上的端口 49000 访问 Jenkins。</li>
+<li><code>--publish 50000:50000</code>：（可选）将 <code>jenkinsci/blueocean</code> 容器的端口 50000 映射到主机上的端口 50000。仅当您在其他计算机上设置了一个或多个基于 JNLP 的 Jenkins 代理时才需要这样做，这些代理又与 <code>jenkinsci/blueocean</code> 容器（充当“master” Jenkins服务器，或仅充当“ Jenkins master服务器”）交互。基于 JNLP 的 Jenkins 代理默认情况下通过 TCP 端口 50000 与 Jenkins master 服务器通信。您可以通过 <a href="https://www.jenkins.io/doc/book/managing/security/">Configure Global Security</a> 页面在 Jenkins master 服务器上更改此端口号。如果要将 JNLP 代理程序的 Jenkins master 服务器的 TCP 端口更改为 51000（例如），则需要重新运行 Jenkins（通过此 <code>docker run …</code> 命令），并使用以下命令指定此 &ldquo;publish&rdquo; 选项 <code>--publish 52000:51000</code>，其中最后一个值与 Jenkins 主服务器上更改后的值匹配，并且第一个值是 Jenkins master 服务器主机上的端口号，基于 JNLP 的 Jenkins 代理通过其通信（与 Jenkins master 服务器） - 即 52000。请注意，Jenkins 2.217 中的 WebSocket 代理不需要此配置。</li>
+<li><code>--volume jenkins-data:/var/jenkins_home</code>：将容器中的 <code>/var/jenkins_home</code> 目录映射到名称为 <code>jenkins-data</code> 的 Docker <a href="https://docs.docker.com/engine/admin/volumes/volumes/">volume</a>。除了将 <code>/var/jenkins_home</code> 目录映射到 Docker 存储卷之外，您还可以将此目录映射到计算机本地文件系统上的目录。例如，指定选项 <code>--volume $HOME/jenkins:/var/jenkins_home</code> 会将容器的 <code>/var/jenkins_home</code> 目录映射到本地计算机上 <code>$HOME</code> 目录中的 <code>jenkins</code> 子目录，该目录通常是 <code>/Users/&lt;your-username&gt;/jenkins</code>  或者 <code>/home/&lt;your-username&gt;/jenkins</code>。请注意，如果您为此更改源存储卷或目录，则需要更新上述 <code>docker:dind</code> 容器中的存储卷以匹配此卷。</li>
+<li><code>--volume jenkins-docker-certs:/certs/client:ro</code>：将 <code>/certs/client</code> 目录映射到先前创建的 <code>jenkins-docker-certs</code> 存储卷。这使连接到 Docker 守护程序所需的客户端 TLS 证书在  <code>DOCKER_CERT_PATH</code> 环境变量指定的路径中可用。</li>
+<li><code>jenkinsci/blueocean</code>：<code>jenkinsci/blueocean</code> Docker 镜像本身。如果尚未下载该镜像，则此 <code>docker container run</code> 命令将自动为您下载该镜像。此外，如果自上次运行此命令以来已发布了对该镜像的任何更新，则再次运行该命令将自动为您下载这些发布的镜像更新。**注意：**也可以使用 <a href="https://docs.docker.com/engine/reference/commandline/image_pull/"><code>docker image pull</code></a> 命令独立下载（或更新）此 Docker 镜像：<code>docker image pull jenkinsci/blueocean</code></li>
+</ul>
+</li>
+<li>
+<p>继续进行 <a href="https://www.jenkins.io/doc/book/installing/#setup-wizard">Post-installation setup wizard</a>。</p>
+</li>
+</ol>
+<h5 id="在-windows-上">在 Windows 上</h5>
+<p>Jenkins 项目提供 Linux 容器镜像，而不是 Windows 容器镜像。确保将 Docker for Windows 安装配置为运行 <code>Linux Containers</code> 而不是 <code>Windows Containers</code>。请参阅 Docker 文档以获取 <a href="https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers">switch to Linux containers</a> 的说明。配置为运行 <code>Linux Containers</code> 后，步骤如下：</p>
+<ol>
+<li>
+<p>打开命令提示符窗口。</p>
+</li>
+<li>
+<p>使用以下 <code>docker network create</code> 命令在 Docker 中创建 <a href="https://docs.docker.com/network/bridge/">桥接网络</a>：</p>
+<pre><code>docker network create jenkins
+</code></pre></li>
+<li>
+<p>使用以下 <code>docker volume create</code> 命令创建以下存储卷，这些存储卷用来共享连接到 Docker 守护程序所需的 Docker 客户端 TLS 证书，和持久化 Jenkins 数据：</p>
+<pre><code>docker volume create jenkins-docker-certs
+docker volume create jenkins-data
+</code></pre></li>
+<li>
+<p>为了在 Jenkins 节点内执行 Docker 命令，请使用以下 <a href="https://docs.docker.com/engine/reference/commandline/container_run/"><code>docker container run</code></a> 命令下载并运行 <code>docker:dind</code> Docker 镜像：</p>
+<pre><code>docker container run --name jenkins-docker --rm --detach ^
+  --privileged --network jenkins --network-alias docker ^
+  --env DOCKER_TLS_CERTDIR=/certs ^
+  --volume jenkins-docker-certs:/certs/client ^
+  --volume jenkins-data:/var/jenkins_home ^
+  docker:dind
+</code></pre></li>
+<li>
+<p>下载 <code>jenkinsci/blueocean</code> 映像，并使用以下 <a href="https://docs.docker.com/engine/reference/commandline/container_run/"><code>docker container run</code></a> 命令将其作为容器在 Docker 中运行：</p>
+<pre><code>docker container run --name jenkins-blueocean --rm --detach ^
+  --network jenkins --env DOCKER_HOST=tcp://docker:2376 ^
+  --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 ^
+  --volume jenkins-data:/var/jenkins_home ^
+  --volume jenkins-docker-certs:/certs/client:ro ^
+  --publish 8080:8080 --publish 50000:50000 jenkinsci/blueocean
+</code></pre><p>有关每个选项的说明，请参阅上面的 <a href="https://www.jenkins.io/doc/book/installing/#on-macos-and-linux">macOS and Linux</a> 说明。</p>
+</li>
+<li>
+<p>继续进行 <a href="https://www.jenkins.io/doc/book/installing/#setup-wizard">Post-installation setup wizard</a>。</p>
+</li>
+</ol>
+<h4 id="访问-jenkinsblue-ocean-docker-容器">访问 Jenkins/Blue Ocean Docker 容器</h4>
+<p>如果您有使用 Docker 的经验，并且希望或需要使用 <a href="https://docs.docker.com/engine/reference/commandline/container_exec/"><code>docker container exec</code></a> 命令通过终端/命令提示符访问 <code>jenkinsci/blueocean</code> 容器，您可以添加 <code>--name jenkins-blueocean</code> 之类的选项（在上面的 <a href="https://docs.docker.com/engine/reference/commandline/container_run/"><code>docker container run</code></a> 中），它将为 <code>jenkinsci/blueocean</code> 容器命名为 “jenkins-blueocean”。</p>
+<p>这意味着您可以使用如下类似的 <code>docker container exec</code> 命令（通过单独的终端/命令提示符窗口）访问容器：</p>
+<pre><code>docker container exec -it jenkins-blueocean bash
+</code></pre><h4 id="通过-docker-日志访问-jenkins-控制台日志">通过 Docker 日志访问 Jenkins 控制台日志</h4>
+<p>您可能需要访问 Jenkins 控制台日志。例如，在 <a href="https://www.jenkins.io/doc/book/installing/#unlocking-jenkins">Unlocking Jenkins</a> 作为 <a href="https://www.jenkins.io/doc/book/installing/#setup-wizard">Post-installation setup wizard</a> 的一部分时。</p>
+<p>如果您没有在 <a href="https://www.jenkins.io/doc/book/installing/#downloading-and-running-jenkins-in-docker">上面</a> 的 <code>docker container run …</code> 命令中指定分离模式选项 <code>--detach</code>，那么可以通过运行该 Docker 命令的终端/命令提示符窗口轻松访问 Jenkins 控制台日志。</p>
+<p>否则，您可以使用以下命令通过 <code>jenkinsci/blueocean</code> 容器的 <a href="https://docs.docker.com/engine/reference/commandline/container_logs/">Docker logs</a> 访问 Jenkins 控制台日志：</p>
+<pre><code>docker container logs &lt;docker-container-name&gt;
+</code></pre><p>您的 <code>&lt;docker-container-name&gt;</code> 可以使用 <a href="https://docs.docker.com/engine/reference/commandline/container_ls/"><code>docker container ls</code></a> 命令获取。如果您在上面的 <code>docker container run …</code> 命令中指定了 <code>--name jenkins-blueocean</code> 选项（另请参阅 <a href="https://www.jenkins.io/doc/book/installing/#accessing-the-jenkins-blue-ocean-docker-container">访问 Jenkins/Blue Ocean Docker 容器</a>），您可以简单地使用 <code>docker container logs</code> 命令：</p>
+<pre><code>docker container logs jenkins-blueocean
+</code></pre><h4 id="访问-jenkins-家目录">访问 Jenkins 家目录</h4>
+<p>您可能需要访问 Jenkins 家目录。例如，在 <code>workspace</code> 子目录中检查 Jenkins 构建的详细信息。</p>
+<p>如果您将 Jenkins 家目录（<code>/var/jenkins_home</code>）映射到计算机的本地文件系统上的目录（即，在 <a href="https://www.jenkins.io/doc/book/installing/#downloading-and-running-jenkins-in-docker">上面</a> 的 <code>docker container run …</code> 命令），那么您可以通过计算机的常规终端/命令提示符访问该目录的内容。</p>
+<p>除此之外，如果您在 <code>docker container run …</code> 命令中指定了 <code>--volume jenkins-data:/var/jenkins_home</code> 选项，您可以使用 <a href="https://docs.docker.com/engine/reference/commandline/container_exec/"><code>docker container exec</code></a> 命令通过 <code>jenkinsci/blueocean</code> 容器的终端/命令提示符访问 Jenkins 家目录的内容：</p>
+<pre><code>docker container exec -it &lt;docker-container-name&gt; bash
+</code></pre><p><a href="https://www.jenkins.io/doc/book/installing/#accessing-the-jenkins-console-log-through-docker-logs">如上所述</a>，您的 <code>&lt;docker-container-name&gt;</code> 可以使用 <a href="https://docs.docker.com/engine/reference/commandline/container_ls/"><code>docker container ls</code></a> 命令获取。如果您在上面的 <code>docker container run …</code> 命令中指定了 <code>--name jenkins-blueocean</code> 选项（另请参阅 <a href="https://www.jenkins.io/doc/book/installing/#accessing-the-jenkins-blue-ocean-docker-container">访问 Jenkins/Blue Ocean Docker 容器</a>），您可以简单地使用 <code>docker container exec</code> 命令：</p>
+<pre><code>docker container exec -it jenkins-blueocean bash
+</code></pre><h2 id="post-installation-setup-wizard">Post-installation setup wizard</h2>
+<p>After downloading, installing and running Jenkins using one of the procedures above, the post-installation setup wizard begins.</p>
+<p>This setup wizard takes you through a few quick &ldquo;one-off&rdquo; steps to unlock Jenkins, customize it with plugins and create the first administrator user through which you can continue accessing Jenkins.</p>
+<h3 id="unlocking-jenkins">Unlocking Jenkins</h3>
+<p>When you first access a new Jenkins instance, you are asked to unlock it using an automatically-generated password.</p>
+<ol>
+<li>
+<p>Browse to <code>http://localhost:8080</code> (or whichever port you configured for Jenkins when installing it) and wait until the <strong>Unlock Jenkins</strong> page appears.</p>
+<p><img src="https://www.jenkins.io/doc/book/resources/tutorials/setup-jenkins-01-unlock-jenkins-page.jpg" alt="Unlock Jenkins page"></p>
+</li>
+<li>
+<p>From the Jenkins console log output, copy the automatically-generated alphanumeric password (between the 2 sets of asterisks).</p>
+<p><img src="https://www.jenkins.io/doc/book/resources/tutorials/setup-jenkins-02-copying-initial-admin-password.png" alt="Copying initial admin password">
+<strong>Note:</strong></p>
+<ul>
+<li>The command: <code>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code> will print the password at console.</li>
+<li>If you are running Jenkins in Docker using the official <code>jenkins/jenkins</code> image you can use <code>sudo docker exec ${CONTAINER_ID or CONTAINER_NAME} cat /var/jenkins_home/secrets/initialAdminPassword</code> to print the password in the console without having to exec into the container.</li>
+</ul>
+</li>
+<li>
+<p>On the <strong>Unlock Jenkins</strong> page, paste this password into the <strong>Administrator password</strong> field and click <strong>Continue</strong>.
+<strong>Notes:</strong></p>
+<ul>
+<li>If you ran Jenkins in Docker in detached mode, you can access the Jenkins console log from the Docker logs (<a href="https://www.jenkins.io/doc/book/installing/#accessing-the-jenkins-console-log-through-docker-logs">above</a>).</li>
+<li>The Jenkins console log indicates the location (in the Jenkins home directory) where this password can also be obtained. This password must be entered in the setup wizard on new Jenkins installations before you can access Jenkins’s main UI. This password also serves as the default admininstrator account’s password (with username &ldquo;admin&rdquo;) if you happen to skip the subsequent user-creation step in the setup wizard.</li>
+</ul>
+</li>
+</ol>
+<h3 id="customizing-jenkins-with-plugins">Customizing Jenkins with plugins</h3>
+<p>After <a href="https://www.jenkins.io/doc/book/installing/#unlocking-jenkins">unlocking Jenkins</a>, the <strong>Customize Jenkins</strong> page appears. Here you can install any number of useful plugins as part of your initial setup.</p>
+<p>Click one of the two options shown:</p>
+<ul>
+<li><strong>Install suggested plugins</strong> - to install the recommended set of plugins, which are based on most common use cases.</li>
+<li><strong>Select plugins to install</strong> - to choose which set of plugins to initially install. When you first access the plugin selection page, the suggested plugins are selected by default.</li>
+</ul>
+<blockquote>
+<p>If you are not sure what plugins you need, choose <strong>Install suggested plugins</strong>. You can install (or remove) additional Jenkins plugins at a later point in time via the <a href="https://www.jenkins.io/doc/book/managing"><strong>Manage Jenkins</strong></a> &gt; <a href="https://www.jenkins.io/doc/book/managing/plugins/"><strong>Manage Plugins</strong></a> page in Jenkins.</p>
+</blockquote>
+<p>The setup wizard shows the progression of Jenkins being configured and your chosen set of Jenkins plugins being installed. This process may take a few minutes.</p>
+<h3 id="creating-the-first-administrator-user">Creating the first administrator user</h3>
+<p>Finally, after <a href="https://www.jenkins.io/doc/book/installing/#customizing-jenkins-with-plugins">customizing Jenkins with plugins</a>, Jenkins asks you to create your first administrator user.</p>
+<ol>
+<li>When the <strong>Create First Admin User</strong> page appears, specify the details for your administrator user in the respective fields and click <strong>Save and Finish</strong>.</li>
+<li>When the <strong>Jenkins is ready</strong> page appears, click <strong>Start using Jenkins</strong>.
+<strong>Notes:</strong>
+<ul>
+<li>This page may indicate <strong>Jenkins is almost ready!</strong> instead and if so, click <strong>Restart</strong>.</li>
+<li>If the page does not automatically refresh after a minute, use your web browser to refresh the page manually.</li>
+</ul>
+</li>
+<li>If required, log in to Jenkins with the credentials of the user you just created and you are ready to start using Jenkins!</li>
+</ol>
+<blockquote>
+<p>From this point on, the Jenkins UI is only accessible by providing valid username and password credentials.</p>
+</blockquote>
+<h2 id="offline-jenkins-installation">Offline Jenkins Installation</h2>
+<p>This section describes how to install Jenkins on a machine that does not have an internet connection.</p>
+<p>To install Jenkins itself, download the appropriate war file and transfer it to your machine.</p>
+<p>Plugins are a different matter, due to dependency requirements.</p>
+<p>The recommended approach is to use <a href="https://github.com/jenkinsci/plugin-installation-manager-tool">Plugin Installation Manager Tool</a>.</p>
+<p>If you want to transfer the individual plugins, you’ll need to retrieve all dependencies as well. There are several dependency retrieval scripts and tools on Github. For example:</p>
+<ul>
+<li><a href="https://github.com/jenkinsci/docker/blob/master/install-plugins.sh">install-plugins.sh</a> - Bash script for managing plugins from the official Docker image for Jenkins</li>
+<li><a href="https://github.com/samrocketman/jenkins-bootstrap-shared">samrocketman/jenkins-bootstrap-shared</a> - Java is required; packages Jenkins and plugins into an immutable package installer. Supported formats include: RPM, DEB, Docker. Can proxy Jenkins and plugins through Nexus or Artifactory since Gradle is used to assemble plugins.</li>
+</ul>
+<h2 id="jenkins-parameters">Jenkins Parameters</h2>
+<p>Jenkins initialization can also be controlled by run time parameters passed as arguments. Command line arguments can adjust networking, security, monitoring, and other settings.</p>
+<h3 id="networking-parameters">Networking parameters</h3>
+<p>Jenkins networking configuration is generally controlled by command line arguments. The networking configuration areguments are:</p>
+<table>
+<thead>
+<tr>
+<th>Command Line Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--httpPort=$HTTP_PORT</code></td>
+<td>Runs Jenkins listener on port $HTTP_PORT using standard <em>http</em> protocol. The default is port 8080. To disable (because you’re using <em>https</em>), use port <code>-1</code>. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.). It is defined by the Jenkins URL specified in the global configuration.</td>
+</tr>
+<tr>
+<td><code>--httpListenAddress=$HTTP_HOST</code></td>
+<td>Binds Jenkins to the IP address represented by $HTTP_HOST. The default is 0.0.0.0 — i.e. listening on all available interfaces. For example, to only listen for requests from localhost, you could use: <code>--httpListenAddress=127.0.0.1</code></td>
+</tr>
+<tr>
+<td><code>--httpsPort=$HTTPS_PORT</code></td>
+<td>Uses HTTPS protocol on port $HTTPS_PORT. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.). It is defined by the Jenkins URL specified in the global configuration.</td>
+</tr>
+<tr>
+<td><code>--httpsListenAddress=$HTTPS_HOST</code></td>
+<td>Binds Jenkins to listen for HTTPS requests on the IP address represented by $HTTPS_HOST.</td>
+</tr>
+<tr>
+<td><code>--http2Port=$HTTP_PORT</code></td>
+<td>Uses HTTP/2 protocol on port $HTTP_PORT. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.). It is defined by the Jenkins URL specified in the global configuration.</td>
+</tr>
+<tr>
+<td><code>--http2ListenAddress=$HTTPS_HOST</code></td>
+<td>Binds Jenkins to listen for HTTP/2 requests on the IP address represented by $HTTPS_HOST.</td>
+</tr>
+<tr>
+<td><code>--prefix=$PREFIX</code></td>
+<td>Runs Jenkins to include the $PREFIX at the end of the URL. For example, set <em>&ndash;prefix=/jenkins</em> to make Jenkins accessible at <em>http://myServer:8080/jenkins</em></td>
+</tr>
+<tr>
+<td><code>--ajp13Port=$AJP_PORT</code></td>
+<td>Runs Jenkins listener on port $AJP_PORT using standard <em>AJP13</em> protocol. The default is port 8009. To disable (because you’re using <em>https</em>), use port <code>-1</code>.</td>
+</tr>
+<tr>
+<td><code>--ajp13ListenAddress=$AJP_ADDR</code></td>
+<td>Binds Jenkins to the IP address represented by $AJP_HOST. The default is 0.0.0.0 — i.e. listening on all available interfaces.</td>
+</tr>
+<tr>
+<td><code>--sessionTimeout=$TIMEOUT</code></td>
+<td>Sets the http session timeout value to $SESSION_TIMEOUT minutes. Default to what webapp specifies, and then to 60 minutes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="miscellaneous-parameters">Miscellaneous parameters</h3>
+<p>Other Jenkins initialization configuration is also controlled by command line arguments. The miscellaneous configuration arguments are:</p>
+<table>
+<thead>
+<tr>
+<th>Command Line Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--argumentsRealm.passwd.$USER=$PASS</code></td>
+<td>Assigns the password for user $USER. If Jenkins security is enabled, you must log in as a user who has an <em>admin</em> role to configure Jenkins.</td>
+</tr>
+<tr>
+<td><code>--argumentsRealm.roles.$USER=admin</code></td>
+<td>Assigns user $USER the admin role. The user can configure Jenkins even if security is enabled in Jenkins. See <a href="https://www.jenkins.io/doc/book/system-administration/security/">Securing Jenkins</a> for more information.</td>
+</tr>
+<tr>
+<td><code>--useJmx</code></td>
+<td>Enable <a href="https://www.eclipse.org/jetty/documentation/current/jmx-chapter.html">Jetty Java Management Extension (JMX)</a></td>
+</tr>
+</tbody>
+</table>
+<p>Jenkins passes all command line parameters to the Winstone servlet container. More information about Jenkins Winstone command line parameters is available from the <a href="https://github.com/jenkinsci/winstone#command-line-options">Winstone Command Line Parameter Reference</a>.</p>
+<blockquote>
+<p><strong>Be Careful with Command Line Parameters</strong> Jenkins ignores command line parameters it doesn’t understand instead of producing an error. Be careful when using command line parameters and make sure you have the correct spelling. For example, the parameter needed for defining the Jenkins administrative user is <code>--argument**s**Realm</code> and not <code>--argumentRealm</code>.</p>
+</blockquote>
+<h3 id="jenkins-properties">Jenkins properties</h3>
+<p>Some Jenkins behaviors are configured with Java properties. Java properties are set from the command line that started Jenkins. Property assignments use the form <code>-DsomeName=someValue</code> to assign the value <code>someValue</code> to the property named <code>someName</code>. For example, to assign the value <code>true</code> to a property <code>testName</code>, the command line argument would be <code>-DtestName=true</code>.</p>
+<p>Refer to the detailed list of <a href="https://www.jenkins.io/doc/book/managing/system-properties/#Featurescontrolledbysystemproperties-PropertiesinJenkinsCore">Jenkins properties</a> for more information.</p>
+<h2 id="configuring-http">Configuring HTTP</h2>
+<h3 id="https-with-an-existing-certificate">HTTPS with an existing certificate</h3>
+<p>If you’re setting up Jenkins using the built-in Winstone server and want to use an existing certificate for HTTPS:</p>
+<pre><code>--httpPort=-1 \
+--httpsPort=443 \
+--httpsKeyStore=path/to/keystore \
+--httpsKeyStorePassword=keystorePassword
+</code></pre><p>The keystore should be in JKS format (as created by the JDK &lsquo;keytool&rsquo;) and the keystore and target key must have the same password. (Placing the keystore arguments after Jenkins-specific parameters does not seem to work; either they are not forwarded to Winstone or Winstone ignores them coming after unknown parameters. So, make sure they are adjacent to the working <code>--httpsPort</code> argument.)</p>
+<p>If your keystore contains multiple certificates (e.g. you are using CA signed certificate) Jenkins might end-up using a incorrect one. In this case you can <a href="http://stackoverflow.com/questions/7528944/convert-ca-signed-jks-keystore-to-pem">convert the keystore to PEM</a> and use following command line options:</p>
+<pre><code>--httpPort=-1 \
+--httpsPort=443 \
+--httpsCertificate=path/to/cert \
+--httpsPrivateKey=path/to/privatekey
+</code></pre><h3 id="using-http2">Using HTTP/2</h3>
+<p>The <a href="https://tools.ietf.org/html/rfc7540">HTTP/2 protocol</a> allows web servers to reduce latency over encrypted connections by pipelining requests, multiplexing requests, and allowing servers to push in some cases before receiving a client request for the data. The Jetty server used by Jenkins supports HTTP/2 with the addition of the Application-Layer Protocol Negotiation (ALPN) TLS extension. The ALPN TLS extension is connected to the specific Jetty version and has specific requirements depending on the Java version.</p>
+<h4 id="java-11-java-8u252-and-later">Java 11, Java 8u252, and later</h4>
+<p>Java 11, Java 8 update 252 and Java 8 versions after update 252 can run the ALPN TLS extension by installing the Jetty ALPN java server jar and passing it as a java command line argument. Steps to install the extension are:</p>
+<ul>
+<li>Identify the Jetty version included in your Jenkins server by searching the Jenkins startup log for the string <code>org.eclipse.jetty.server.Server#doStart</code>. For example:
+<code>org.eclipse.jetty.server.Server#doStart: jetty-9.4.27.v20200227</code></li>
+<li>Locate the Java version on the &ldquo;System Information&rdquo; page of &ldquo;Manage Jenkins&rdquo; to confirm it is Java 11 or 8u252 (or later)</li>
+<li>Download the <a href="https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-alpn-java-server">jetty-alpn-java-server</a> with the version number matching the Jetty version bundled with your Jenkins version</li>
+<li>Place the jetty-alpn-java-server.jar file in a directory accessible to the JVM</li>
+<li>Add <code>--extraLibFolder=/path/to/extra/lib/folder</code> to the Java command line arguments that start Jenkins</li>
+</ul>
+<pre><code>java --extraLibFolder=/opt/java/jetty-alpn-java-server-9.4.27.v20200227.jar \
+    -jar target/jenkins.war \
+    --http2Port=9090
+</code></pre><h4 id="java-8u242-and-earlier">Java 8u242 and earlier</h4>
+<p>Java 8 update 242 and earlier can run the ALPN TLS extension by installing the Jetty ALPN boot library corresponding to the <em>exact OpenJDK version</em> you are using into the Java boot classpath. Steps to install the extension are:</p>
+<ul>
+<li>Identify the Java version running your Jenkins server from the &ldquo;Manage Jenkins&rdquo; → &ldquo;System Information&rdquo; page</li>
+<li>Find the <a href="https://www.eclipse.org/jetty/documentation/current/alpn-chapter.html#alpn-versions">boot library</a> for your OpenJDK version</li>
+<li>Download the matching <a href="https://repo1.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/">alpn-boot.jar</a> file to a directory accessible to the JVM</li>
+<li>Add the alpn-boot.jar to the JVM boot classpath by adding <code>-Xbootclasspath/p:/path/to/alpn-boot.jar</code> to the Java command line arguments that start Jenkins</li>
+</ul>
+<pre><code>java -Xbootclasspath/p:/opt/java/alpn-boot-8.1.13.v20181017.jar \
+    -jar target/jenkins.war \
+    --http2Port=9090
+</code></pre><h3 id="https-certificates-with-windows">HTTPS certificates with Windows</h3>
+<p>These instructions use a stock Jenkins installation on Windows Server. The instructions assume a certificate signed by a Certificate Authority such as Digicert. If you are making your own certificate skip steps 3, 4, and 5.</p>
+<p>This process utilizes Java’s keytool. Use the Java <code>keytool</code> included with your Java installation.</p>
+<p><strong>Step 1</strong>: Create a new keystore on your server. This will place a &lsquo;keystore&rsquo; file in your current directory.</p>
+<pre><code>C:\&gt;keytool -genkeypair -keysize 2048 -keyalg RSA -alias jenkins -keystore keystore
+Enter keystore password:
+Re-enter new password:
+What is your first and last name?
+[Unknown]: server.example.com
+What is the name of your organizational unit?
+[Unknown]: A Unit
+What is the name of your organization?
+[Unknown]: A Company
+What is the name of your City or Locality?
+[Unknown]: A City
+What is the name of your State or Province?
+[Unknown]: A State
+What is the two-letter country code for this unit?
+[Unknown]: US
+Is CN=server.example.com, OU=A Unit, O=A Company, L=A City, ST=A State, C=US correct?
+[no]: yes
+
+Enter key password for &lt;jenkins&gt;
+(RETURN if same as keystore password):
+</code></pre><p><strong>Step 2</strong>: Verify the keystore was created (your fingerprint will vary)</p>
+<pre><code>C:\&gt;keytool -list -keystore keystore
+Enter keystore password:
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+jenkins, May 6, 2015, PrivateKeyEntry,
+Certificate fingerprint (SHA1): AA:AA:AA:AA:AA:AA:AA:AA:AA:AA ...
+</code></pre><p><strong>Step 3</strong>: Create the certificate request. This will create a &lsquo;certreq.csr&rsquo; file in your current directory.</p>
+<pre><code>C:\&gt;keytool -certreq -alias jenkins -keyalg RSA ^
+-file certreq.csr ^
+-ext SAN=dns:server-name,dns:server-name.your.company.com ^
+-keystore keystore
+Enter keystore password:
+</code></pre><p><strong>Step 4</strong>: Use the contents of the <code>certreq.csr</code> file to generate a certificate from your certificate provider. Request a SHA-1 certificate (SHA-2 is untested but will likely work). If using DigiCert, download the resulting certificate as Other format &ldquo;a .p7b bundle of all the certs in a .p7b file&rdquo;.</p>
+<p><strong>Step 5</strong>: Add the resulting .p7b into the keystore you created above.</p>
+<pre><code>C:\&gt;keytool -import ^
+-alias jenkins ^
+-trustcacerts ^
+-file response_from_digicert.p7b ^
+-keystore keystore
+Enter keystore password:
+Certificate reply was installed in keystore
+</code></pre><p><strong>Step 6</strong>: Copy the &lsquo;keystore&rsquo; file to your Jenkins secrets directory. On a stock installation, this will be at</p>
+<pre><code>C:\Program Files (x86)\Jenkins\secrets
+</code></pre><p><strong>Step 7</strong>: Modify the <arguments> section of your <code>C:\Program Files (x86)\Jenkins\jenkins.xml</code> file to reflect the new certificate. Note: This example disables http via <code>--httpPort=-1</code> and places the server on <code>8443</code> via <code>--httpsPort=8443</code>.</p>
+<pre><code>&lt;arguments&gt;
+  -Xrs
+  -Xmx256m
+  -Dhudson.lifecycle=hudson.lifecycle.WindowsServiceLifecycle
+  -jar &quot;%BASE%\jenkins.war&quot;
+  --httpPort=-1
+  --httpsPort=8443
+  --httpsKeyStore=&quot;%BASE%\secrets\keystore&quot;
+  --httpsKeyStorePassword=your.password.here
+&lt;/arguments&gt;
+</code></pre><p><strong>Step 8</strong>: Restart the jenkins service to initialize the new configuration.</p>
+<pre><code>net stop jenkins
+net start jenkins
+</code></pre><p><strong>Step 9</strong>: After 30-60 seconds, Jenkins will have completed the startup process and you should be able to access the website at <em><a href="https://server.example.com">https://server.example.com</a>:8443</em>. Verify the certificate looks good via your browser’s tools. If the service terminates immediately, there’s an error somewhere in your configuration. Useful error information can be found in:</p>
+<pre><code>C:\Program Files (x86)\Jenkins\jenkins.err.log
+C:\Program Files (x86)\Jenkins\jenkins.out.log
+</code></pre>
+	
+	
+	<div class="text-muted mt-5 pt-3 border-top">最后修改 2020-07-19 00:00AM Sun
+</div>
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>

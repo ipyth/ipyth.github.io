@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Pod Preset | Website</title><meta property="og:title" content="Pod Preset" />
+<meta property="og:description" content="**功能状态：**Kubernetes v1.6 [alpha]
+本文提供了 PodPreset 的概述。在 Pod 创建时，用户可以使用 PodPreset 对象将特定信息注入 Pod 中，这些信息可以包括 secret、卷、卷挂载和环境变量。
+理解 Pod Preset Pod Preset 是一种 API 资源，在 Pod 创建时，用户可以用它将额外的运行时需求信息注入 Pod。 使用标签选择器（label selector）来指定 Pod Preset 所适用的 Pod。
+使用 Pod Preset 使得 Pod 模板编写者不必显式地为每个 Pod 设置所有信息。这样，使用特定服务的 Pod 模板编写者不需要了解该服务的所有细节。
+了解更多的相关背景信息，请参考 PodPreset 设计提案。
+在集群中启用 PodPreset 为了在集群中使用 Pod Preset，您必须确保以下几点：
+  您已启用 API settings.k8s.io/v1alpha1/podpreset 类型。例如，可以通过在 API Server 的 --runtime-config 选项中包含 settings.k8s.io/v1alpha1=true 来实现。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver.runtime-config=settings.k8s.io/v1alpha1=true。
+  您已启用 PodPreset 准入控制器。一种方法是将 PodPreset 包含在为 API Server 指定的 --enable-admission-plugins 选项值中。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/docs/kubernetes/concepts/workloads/pods/pod-preset/" />
+<meta property="article:published_time" content="2020-07-23T16:43:26+08:00" />
+<meta property="article:modified_time" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="name" content="Pod Preset">
+<meta itemprop="description" content="**功能状态：**Kubernetes v1.6 [alpha]
+本文提供了 PodPreset 的概述。在 Pod 创建时，用户可以使用 PodPreset 对象将特定信息注入 Pod 中，这些信息可以包括 secret、卷、卷挂载和环境变量。
+理解 Pod Preset Pod Preset 是一种 API 资源，在 Pod 创建时，用户可以用它将额外的运行时需求信息注入 Pod。 使用标签选择器（label selector）来指定 Pod Preset 所适用的 Pod。
+使用 Pod Preset 使得 Pod 模板编写者不必显式地为每个 Pod 设置所有信息。这样，使用特定服务的 Pod 模板编写者不需要了解该服务的所有细节。
+了解更多的相关背景信息，请参考 PodPreset 设计提案。
+在集群中启用 PodPreset 为了在集群中使用 Pod Preset，您必须确保以下几点：
+  您已启用 API settings.k8s.io/v1alpha1/podpreset 类型。例如，可以通过在 API Server 的 --runtime-config 选项中包含 settings.k8s.io/v1alpha1=true 来实现。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver.runtime-config=settings.k8s.io/v1alpha1=true。
+  您已启用 PodPreset 准入控制器。一种方法是将 PodPreset 包含在为 API Server 指定的 --enable-admission-plugins 选项值中。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver.">
+<meta itemprop="datePublished" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="dateModified" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="wordCount" content="178">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pod Preset"/>
+<meta name="twitter:description" content="**功能状态：**Kubernetes v1.6 [alpha]
+本文提供了 PodPreset 的概述。在 Pod 创建时，用户可以使用 PodPreset 对象将特定信息注入 Pod 中，这些信息可以包括 secret、卷、卷挂载和环境变量。
+理解 Pod Preset Pod Preset 是一种 API 资源，在 Pod 创建时，用户可以用它将额外的运行时需求信息注入 Pod。 使用标签选择器（label selector）来指定 Pod Preset 所适用的 Pod。
+使用 Pod Preset 使得 Pod 模板编写者不必显式地为每个 Pod 设置所有信息。这样，使用特定服务的 Pod 模板编写者不需要了解该服务的所有细节。
+了解更多的相关背景信息，请参考 PodPreset 设计提案。
+在集群中启用 PodPreset 为了在集群中使用 Pod Preset，您必须确保以下几点：
+  您已启用 API settings.k8s.io/v1alpha1/podpreset 类型。例如，可以通过在 API Server 的 --runtime-config 选项中包含 settings.k8s.io/v1alpha1=true 来实现。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver.runtime-config=settings.k8s.io/v1alpha1=true。
+  您已启用 PodPreset 准入控制器。一种方法是将 PodPreset 包含在为 API Server 指定的 --enable-admission-plugins 选项值中。在使用 minikube 的情况下，在启动集群时添加此标志 --extra-config=apiserver."/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Documentation</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docs">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Kubernetes 文档</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetes">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Concepts</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconcepts">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/overview/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Overview</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsoverview">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewkubenetes-components" href="/docs/kubernetes/concepts/overview/kubenetes-components/">Kubernetes Components</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewwhat-is-kubernetes" href="/docs/kubernetes/concepts/overview/what-is-kubernetes/">What is Kubernetes?</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/cluster-architecture/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Cluster Architecture</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptscluster-architecture">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptscluster-architecturecontrollers" href="/docs/kubernetes/concepts/cluster-architecture/controllers/">Controllers</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Workloads</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloads">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/pods/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">Pods</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloadspods">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-overview" href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspods" href="/docs/kubernetes/concepts/workloads/pods/pods/">Pods</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-lifecycle" href="/docs/kubernetes/concepts/workloads/pods/pod-lifecycle/">Pod Lifecycle</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsinit-containers" href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-docskubernetesconceptsworkloadspodspod-preset" href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-topology-spread-constraints" href="/docs/kubernetes/concepts/workloads/pods/pod-topology-spread-constraints/">Pod 拓扑扩展约束</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsdisruptions" href="/docs/kubernetes/concepts/workloads/pods/disruptions/">干扰（Disruptions）</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Prometheus</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheus">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheusintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionoverview" href="/docs/prometheus/introduction/overview/">Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfirst-steps" href="/docs/prometheus/introduction/first-steps/">First Steps</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductioncomparison-to-alternatives" href="/docs/prometheus/introduction/comparison-to-alternatives/">Comparison to Alternatives</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfaq" href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Envoy</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoy">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoyintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsenvoyintroductionwhat-is-envoy" href="/docs/envoy/introduction/what-is-envoy/">What is Envoy</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Jenkins</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkins">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/user-handbook/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">User Handbook</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkinsuser-handbook">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookinstalling-jenkins" href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookoverview" href="/docs/jenkins/user-handbook/overview/">User Handbook Overview</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/docs/kubernetes/concepts/workloads/pods/pod-preset.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=Pod%20Preset" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#理解-pod-preset">理解 Pod Preset</a></li>
+    <li><a href="#在集群中启用-podpreset">在集群中启用 PodPreset</a></li>
+    <li><a href="#podpreset-如何工作">PodPreset 如何工作</a>
+      <ul>
+        <li><a href="#为特定-pod-禁用-pod-preset">为特定 Pod 禁用 Pod Preset</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+            
+  
+
+            <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/">Documentation</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/">Kubernetes 文档</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/">Concepts</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/">Workloads</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/pods/">Pods</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+</li>
+
+	</ol>
+</nav	>
+
+            
+<div class="td-content">
+	<h1>Pod Preset</h1>
+    
+	       
+	<p>**功能状态：**<code>Kubernetes v1.6 [alpha]</code></p>
+<p>本文提供了 PodPreset 的概述。在 Pod 创建时，用户可以使用 PodPreset 对象将特定信息注入 Pod 中，这些信息可以包括 secret、卷、卷挂载和环境变量。</p>
+<h2 id="理解-pod-preset">理解 Pod Preset</h2>
+<p><code>Pod Preset</code> 是一种 API 资源，在 Pod 创建时，用户可以用它将额外的运行时需求信息注入 Pod。 使用<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">标签选择器（label selector）</a>来指定 Pod Preset 所适用的 Pod。</p>
+<p>使用 Pod Preset 使得 Pod 模板编写者不必显式地为每个 Pod 设置所有信息。这样，使用特定服务的 Pod 模板编写者不需要了解该服务的所有细节。</p>
+<p>了解更多的相关背景信息，请参考 <a href="https://git.k8s.io/community/contributors/design-proposals/service-catalog/pod-preset.md">PodPreset 设计提案</a>。</p>
+<h2 id="在集群中启用-podpreset">在集群中启用 PodPreset</h2>
+<p>为了在集群中使用 Pod Preset，您必须确保以下几点：</p>
+<ol>
+<li>
+<p>您已启用 API <code>settings.k8s.io/v1alpha1/podpreset</code> 类型。例如，可以通过在 API Server 的 <code>--runtime-config</code> 选项中包含 <code>settings.k8s.io/v1alpha1=true</code> 来实现。在使用 minikube 的情况下，在启动集群时添加此标志 <code>--extra-config=apiserver.runtime-config=settings.k8s.io/v1alpha1=true</code>。</p>
+</li>
+<li>
+<p>您已启用 <code>PodPreset</code> 准入控制器。一种方法是将 <code>PodPreset</code> 包含在为 API Server 指定的 <code>--enable-admission-plugins</code> 选项值中。在使用 minikube 的情况下，在启动集群时添加此标志 <code>--extra-config=apiserver.enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,PodPreset</code>。</p>
+</li>
+</ol>
+<h2 id="podpreset-如何工作">PodPreset 如何工作</h2>
+<p>Kubernetes 提供了准入控制器（<code>PodPreset</code>），该控制器被启用时，会将 Pod Preset 应用于传入的 Pod 创建请求中。 当出现 Pod 创建请求时，系统会执行以下操作：</p>
+<ol>
+<li>检索所有可用 <code>PodPresets</code> 。</li>
+<li>检查 <code>PodPreset</code> 的标签选择器与要创建的 Pod 的标签是否匹配。</li>
+<li>尝试将 <code>PodPreset</code> 中定义的各种资源合并到正在创建的 Pod 中。</li>
+<li>发生错误时，抛出一个事件用来记录在 Pod 上的合并错误，同时在 <em>不注入</em> 任何来自 <code>PodPreset</code> 的资源的情况下创建 Pod。</li>
+<li>为修改后的 Pod spec 添加注解，来表明它已被 <code>PodPreset</code> 修改。注解的格式为： <code>podpreset.admission.kubernetes.io/podpreset-&lt;pod-preset name&gt;&quot;: &quot;&lt;resource version&gt;&quot;</code>。</li>
+</ol>
+<p>每个 Pod 可以匹配零个或多个 Pod Preset；并且每个 <code>PodPreset</code> 可以应用于零个或多个 Pod。当 <code>PodPreset</code> 应用于一个或多个 Pod 时，Kubernetes 会修改 Pod Spec。对于 <code>Env</code>、<code>EnvFrom</code> 和 <code>VolumeMounts</code> 的改动，Kubernetes 修改 Pod 中所有容器的规格；对于 <code>Volume</code> 的改动，Kubernetes 修改 Pod Spec。</p>
+<blockquote>
+<p><strong>说明：</strong> 适当时候，Pod Preset 可以修改 Pod Spec 中的以下字段： - <code>.spec.containers</code> 字段 - <code>initContainers</code> 字段（需要 Kubernetes 1.14.0 或更高版本）。</p>
+</blockquote>
+<h3 id="为特定-pod-禁用-pod-preset">为特定 Pod 禁用 Pod Preset</h3>
+<p>在某些情况下，您希望 Pod 不受任何 Pod Preset 变动的影响。这时，您可以在  Pod Spec 中添加如下格式 <code>podpreset.admission.kubernetes.io/exclude: &quot;true&quot;</code> 的注解。</p>
+
+	
+	
+	<div class="text-muted mt-5 pt-3 border-top">最后修改 2020-07-23 16:43PM Thu
+</div>
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>

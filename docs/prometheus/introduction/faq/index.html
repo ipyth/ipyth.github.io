@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Frequently Asked Questions | Website</title><meta property="og:title" content="Frequently Asked Questions" />
+<meta property="og:description" content="General 什么是 Prometheus？ Prometheus 是具有活跃生态系统的开源系统监视和警报工具包。请参阅 overview。
+Prometheus 与其他监控系统相比如何？ 请参阅 comparison 页面。
+Prometheus 有什么依赖性？ 主要的 Prometheus server 独立运行，没有外部依赖性。
+可以使 Prometheus 高度可用吗？ 是的，在两台或更多台单独的计算机上运行相同的 Prometheus server。相同的警报将由 Alertmanager 进行重复数据删除。
+为了 Alertmanager的高可用，您可以在 Mesh cluster 中运行多个实例，并将 Prometheus server 配置为向每个实例发送通知。
+有人告诉我 Prometheus “不能缩放”。 实际上，存在多种缩放和联合 Prometheus 的方法。阅读 Robust Perception 博客上的 Scaling and Federating Prometheus，以开始使用。
+Prometheus 用什么语言编写？ 大多数 Prometheus 组件都是用Go编写的。有些还用 Java、Python 和 Ruby 编写。
+Prometheus 功能、存储格式和 API 的稳定性如何？ All repositories in the Prometheus GitHub organization that have reached version 1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/docs/prometheus/introduction/faq/" />
+<meta property="article:published_time" content="2020-07-25T18:12:30+08:00" />
+<meta property="article:modified_time" content="2020-07-25T18:12:30+08:00" />
+<meta itemprop="name" content="Frequently Asked Questions">
+<meta itemprop="description" content="General 什么是 Prometheus？ Prometheus 是具有活跃生态系统的开源系统监视和警报工具包。请参阅 overview。
+Prometheus 与其他监控系统相比如何？ 请参阅 comparison 页面。
+Prometheus 有什么依赖性？ 主要的 Prometheus server 独立运行，没有外部依赖性。
+可以使 Prometheus 高度可用吗？ 是的，在两台或更多台单独的计算机上运行相同的 Prometheus server。相同的警报将由 Alertmanager 进行重复数据删除。
+为了 Alertmanager的高可用，您可以在 Mesh cluster 中运行多个实例，并将 Prometheus server 配置为向每个实例发送通知。
+有人告诉我 Prometheus “不能缩放”。 实际上，存在多种缩放和联合 Prometheus 的方法。阅读 Robust Perception 博客上的 Scaling and Federating Prometheus，以开始使用。
+Prometheus 用什么语言编写？ 大多数 Prometheus 组件都是用Go编写的。有些还用 Java、Python 和 Ruby 编写。
+Prometheus 功能、存储格式和 API 的稳定性如何？ All repositories in the Prometheus GitHub organization that have reached version 1.">
+<meta itemprop="datePublished" content="2020-07-25T18:12:30+08:00" />
+<meta itemprop="dateModified" content="2020-07-25T18:12:30+08:00" />
+<meta itemprop="wordCount" content="1061">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Frequently Asked Questions"/>
+<meta name="twitter:description" content="General 什么是 Prometheus？ Prometheus 是具有活跃生态系统的开源系统监视和警报工具包。请参阅 overview。
+Prometheus 与其他监控系统相比如何？ 请参阅 comparison 页面。
+Prometheus 有什么依赖性？ 主要的 Prometheus server 独立运行，没有外部依赖性。
+可以使 Prometheus 高度可用吗？ 是的，在两台或更多台单独的计算机上运行相同的 Prometheus server。相同的警报将由 Alertmanager 进行重复数据删除。
+为了 Alertmanager的高可用，您可以在 Mesh cluster 中运行多个实例，并将 Prometheus server 配置为向每个实例发送通知。
+有人告诉我 Prometheus “不能缩放”。 实际上，存在多种缩放和联合 Prometheus 的方法。阅读 Robust Perception 博客上的 Scaling and Federating Prometheus，以开始使用。
+Prometheus 用什么语言编写？ 大多数 Prometheus 组件都是用Go编写的。有些还用 Java、Python 和 Ruby 编写。
+Prometheus 功能、存储格式和 API 的稳定性如何？ All repositories in the Prometheus GitHub organization that have reached version 1."/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Documentation</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docs">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Kubernetes 文档</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetes">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Concepts</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconcepts">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/overview/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Overview</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsoverview">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewkubenetes-components" href="/docs/kubernetes/concepts/overview/kubenetes-components/">Kubernetes Components</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewwhat-is-kubernetes" href="/docs/kubernetes/concepts/overview/what-is-kubernetes/">What is Kubernetes?</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/cluster-architecture/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Cluster Architecture</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptscluster-architecture">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptscluster-architecturecontrollers" href="/docs/kubernetes/concepts/cluster-architecture/controllers/">Controllers</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Workloads</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsworkloads">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/pods/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Pods</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsworkloadspods">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-overview" href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspods" href="/docs/kubernetes/concepts/workloads/pods/pods/">Pods</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-lifecycle" href="/docs/kubernetes/concepts/workloads/pods/pod-lifecycle/">Pod Lifecycle</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsinit-containers" href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-preset" href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-topology-spread-constraints" href="/docs/kubernetes/concepts/workloads/pods/pod-topology-spread-constraints/">Pod 拓扑扩展约束</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsdisruptions" href="/docs/kubernetes/concepts/workloads/pods/disruptions/">干扰（Disruptions）</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Prometheus</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docsprometheus">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/introduction/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docsprometheusintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionoverview" href="/docs/prometheus/introduction/overview/">Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfirst-steps" href="/docs/prometheus/introduction/first-steps/">First Steps</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductioncomparison-to-alternatives" href="/docs/prometheus/introduction/comparison-to-alternatives/">Comparison to Alternatives</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-docsprometheusintroductionfaq" href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Envoy</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoy">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoyintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsenvoyintroductionwhat-is-envoy" href="/docs/envoy/introduction/what-is-envoy/">What is Envoy</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Jenkins</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkins">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/user-handbook/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">User Handbook</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkinsuser-handbook">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookinstalling-jenkins" href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookoverview" href="/docs/jenkins/user-handbook/overview/">User Handbook Overview</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/docs/prometheus/introduction/faq.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=Frequently%20Asked%20Questions" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#general">General</a>
+      <ul>
+        <li><a href="#什么是-prometheus">什么是 Prometheus？</a></li>
+        <li><a href="#prometheus-与其他监控系统相比如何">Prometheus 与其他监控系统相比如何？</a></li>
+        <li><a href="#prometheus-有什么依赖性">Prometheus 有什么依赖性？</a></li>
+        <li><a href="#可以使-prometheus-高度可用吗">可以使 Prometheus 高度可用吗？</a></li>
+        <li><a href="#有人告诉我-prometheus-不能缩放">有人告诉我 Prometheus “不能缩放”。</a></li>
+        <li><a href="#prometheus-用什么语言编写">Prometheus 用什么语言编写？</a></li>
+        <li><a href="#prometheus-功能存储格式和-api-的稳定性如何">Prometheus 功能、存储格式和 API 的稳定性如何？</a></li>
+        <li><a href="#为什么要拉取而不是推送">为什么要拉取而不是推送？</a></li>
+        <li><a href="#如何将日志输入-prometheus">如何将日志输入 Prometheus？</a></li>
+        <li><a href="#谁写了-prometheus">谁写了 Prometheus？</a></li>
+        <li><a href="#prometheus-使用什么许可证">Prometheus 使用什么许可证？</a></li>
+        <li><a href="#prometheus-的复数是什么">Prometheus 的复数是什么？</a></li>
+        <li><a href="#我可以重新载入-prometheus-的配置吗">我可以重新载入 Prometheus 的配置吗？</a></li>
+        <li><a href="#我可以发送警报吗">我可以发送警报吗？</a></li>
+        <li><a href="#can-i-create-dashboards">Can I create dashboards?</a></li>
+        <li><a href="#can-i-change-the-timezone-why-is-everything-in-utc">Can I change the timezone? Why is everything in UTC?</a></li>
+      </ul>
+    </li>
+    <li><a href="#instrumentation">Instrumentation</a>
+      <ul>
+        <li><a href="#which-languages-have-instrumentation-libraries">Which languages have instrumentation libraries?</a></li>
+        <li><a href="#can-i-monitor-machines">Can I monitor machines?</a></li>
+        <li><a href="#can-i-monitor-network-devices">Can I monitor network devices?</a></li>
+        <li><a href="#can-i-monitor-batch-jobs">Can I monitor batch jobs?</a></li>
+        <li><a href="#what-applications-can-prometheus-monitor-out-of-the-box">What applications can Prometheus monitor out of the box?</a></li>
+        <li><a href="#can-i-monitor-jvm-applications-via-jmx">Can I monitor JVM applications via JMX?</a></li>
+        <li><a href="#what-is-the-performance-impact-of-instrumentation">What is the performance impact of instrumentation?</a></li>
+      </ul>
+    </li>
+    <li><a href="#故障排除">故障排除</a>
+      <ul>
+        <li><a href="#我的-prometheus-1x-server-需要很长时间才能启动并且会向日志中发送有关崩溃恢复的大量信息的垃圾邮件">我的 Prometheus 1.x server 需要很长时间才能启动，并且会向日志中发送有关崩溃恢复的大量信息的垃圾邮件。</a></li>
+        <li><a href="#my-prometheus-1x-server-runs-out-of-memory">My Prometheus 1.x server runs out of memory.</a></li>
+        <li><a href="#my-prometheus-1x-server-reports-to-be-in-rushed-mode-or-that-storage-needs-throttling">My Prometheus 1.x server reports to be in “rushed mode” or that “storage needs throttling”.</a></li>
+      </ul>
+    </li>
+    <li><a href="#implementation">Implementation</a>
+      <ul>
+        <li><a href="#why-are-all-sample-values-64-bit-floats-i-want-integers">Why are all sample values 64-bit floats? I want integers.</a></li>
+        <li><a href="#why-dont-the-prometheus-server-components-support-tls-or-authentication-can-i-add-those">Why don&rsquo;t the Prometheus server components support TLS or authentication? Can I add those?</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+            
+  
+
+            <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/">Documentation</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/prometheus/">Prometheus</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/prometheus/introduction/">Introduction</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+</li>
+
+	</ol>
+</nav	>
+
+            
+<div class="td-content">
+	<h1>Frequently Asked Questions</h1>
+    
+	       
+	<h2 id="general">General</h2>
+<h3 id="什么是-prometheus">什么是 Prometheus？</h3>
+<p>Prometheus 是具有活跃生态系统的开源系统监视和警报工具包。请参阅 <a href="https://prometheus.io/docs/introduction/overview/">overview</a>。</p>
+<h3 id="prometheus-与其他监控系统相比如何">Prometheus 与其他监控系统相比如何？</h3>
+<p>请参阅 <a href="https://prometheus.io/docs/introduction/comparison/">comparison</a> 页面。</p>
+<h3 id="prometheus-有什么依赖性">Prometheus 有什么依赖性？</h3>
+<p>主要的 Prometheus server 独立运行，没有外部依赖性。</p>
+<h3 id="可以使-prometheus-高度可用吗">可以使 Prometheus 高度可用吗？</h3>
+<p>是的，在两台或更多台单独的计算机上运行相同的 Prometheus server。相同的警报将由 <a href="https://github.com/prometheus/alertmanager">Alertmanager</a> 进行重复数据删除。</p>
+<p>为了 <a href="https://github.com/prometheus/alertmanager#high-availability">Alertmanager的高可用</a>，您可以在 <a href="https://github.com/weaveworks/mesh">Mesh cluster</a> 中运行多个实例，并将 Prometheus server 配置为向每个实例发送通知。</p>
+<h3 id="有人告诉我-prometheus-不能缩放">有人告诉我 Prometheus “不能缩放”。</h3>
+<p>实际上，存在多种缩放和联合 Prometheus 的方法。阅读 Robust Perception 博客上的 <a href="https://www.robustperception.io/scaling-and-federating-prometheus/">Scaling and Federating Prometheus</a>，以开始使用。</p>
+<h3 id="prometheus-用什么语言编写">Prometheus 用什么语言编写？</h3>
+<p>大多数 Prometheus 组件都是用Go编写的。有些还用 Java、Python 和 Ruby 编写。</p>
+<h3 id="prometheus-功能存储格式和-api-的稳定性如何">Prometheus 功能、存储格式和 API 的稳定性如何？</h3>
+<p>All repositories in the Prometheus GitHub organization that have reached version 1.0.0 broadly follow <a href="http://semver.org/">semantic versioning</a>. Breaking changes are indicated by increments of the major version. Exceptions are possible for experimental components, which are clearly marked as such in announcements.</p>
+<p>Even repositories that have not yet reached version 1.0.0 are, in general, quite stable. We aim for a proper release process and an eventual 1.0.0 release for each repository. In any case, breaking changes will be pointed out in release notes (marked by <code>[CHANGE]</code>) or communicated clearly for components that do not have formal releases yet.</p>
+<h3 id="为什么要拉取而不是推送">为什么要拉取而不是推送？</h3>
+<p>通过 HTTP 拉取有许多优点：</p>
+<ul>
+<li>开发更改时，可以在笔记本电脑上运行监控。</li>
+<li>您可以更轻松地判断目标是否已关闭。</li>
+<li>您可以手动转到目标并使用Web浏览器检查其运行状况。</li>
+</ul>
+<p>总体而言，我们认为拉取要比推送略好，但在考虑使用监控系统时，不应将其视为重点。</p>
+<p>对于必须推送的情况，我们提供了 <a href="https://prometheus.io/docs/instrumenting/pushing/">Pushgateway</a>。</p>
+<h3 id="如何将日志输入-prometheus">如何将日志输入 Prometheus？</h3>
+<p>Short answer: Don&rsquo;t! Use something like the <a href="https://www.elastic.co/products">ELK stack</a> instead.</p>
+<p>Longer answer: Prometheus is a system to collect and process metrics, not an event logging system. The Raintank blog post <a href="https://blog.raintank.io/logs-and-metrics-and-graphs-oh-my/">Logs and Metrics and Graphs, Oh My!</a> provides more details about the differences between logs and metrics.</p>
+<p>If you want to extract Prometheus metrics from application logs, Google&rsquo;s <a href="https://github.com/google/mtail">mtail</a> might be helpful.</p>
+<h3 id="谁写了-prometheus">谁写了 Prometheus？</h3>
+<p>Prometheus was initially started privately by <a href="http://www.matttproud.com/">Matt T. Proud</a> and <a href="http://juliusv.com/">Julius Volz</a>. The majority of its initial development was sponsored by <a href="https://soundcloud.com/">SoundCloud</a>.</p>
+<p>It&rsquo;s now maintained and extended by a wide range of companies and individuals.</p>
+<h3 id="prometheus-使用什么许可证">Prometheus 使用什么许可证？</h3>
+<p>Prometheus is released under the <a href="https://github.com/prometheus/prometheus/blob/master/LICENSE">Apache 2.0</a> license.</p>
+<h3 id="prometheus-的复数是什么">Prometheus 的复数是什么？</h3>
+<p>After <a href="https://youtu.be/B_CDeYrqxjQ">extensive research</a>, it has been determined that the correct plural of &lsquo;Prometheus&rsquo; is &lsquo;Prometheis&rsquo;.</p>
+<h3 id="我可以重新载入-prometheus-的配置吗">我可以重新载入 Prometheus 的配置吗？</h3>
+<p>Yes, sending <code>SIGHUP</code> to the Prometheus process or an HTTP POST request to the <code>/-/reload</code> endpoint will reload and apply the configuration file. The various components attempt to handle failing changes gracefully.</p>
+<h3 id="我可以发送警报吗">我可以发送警报吗？</h3>
+<p>Yes, with the <a href="https://github.com/prometheus/alertmanager">Alertmanager</a>.</p>
+<p>Currently, the following external systems are supported:</p>
+<ul>
+<li>Email</li>
+<li>Generic Webhooks</li>
+<li><a href="https://www.hipchat.com/">HipChat</a></li>
+<li><a href="https://www.opsgenie.com/">OpsGenie</a></li>
+<li><a href="https://www.pagerduty.com/">PagerDuty</a></li>
+<li><a href="https://pushover.net/">Pushover</a></li>
+<li><a href="https://slack.com/">Slack</a></li>
+</ul>
+<h3 id="can-i-create-dashboards">Can I create dashboards?</h3>
+<p>Yes, we recommend <a href="https://prometheus.io/docs/visualization/grafana/">Grafana</a> for production usage. There are also <a href="https://prometheus.io/docs/visualization/consoles/">Console templates</a>.</p>
+<h3 id="can-i-change-the-timezone-why-is-everything-in-utc">Can I change the timezone? Why is everything in UTC?</h3>
+<p>To avoid any kind of timezone confusion, especially when the so-called daylight saving time is involved, we decided to exclusively use Unix time internally and UTC for display purposes in all components of Prometheus. A carefully done timezone selection could be introduced into the UI. Contributions are welcome. See <a href="https://github.com/prometheus/prometheus/issues/500">issue #500</a> for the current state of this effort.</p>
+<h2 id="instrumentation">Instrumentation</h2>
+<h3 id="which-languages-have-instrumentation-libraries">Which languages have instrumentation libraries?</h3>
+<p>There are a number of client libraries for instrumenting your services with Prometheus metrics. See the <a href="https://prometheus.io/docs/instrumenting/clientlibs/">client libraries</a> documentation for details.</p>
+<p>If you are interested in contributing a client library for a new language, see the <a href="https://prometheus.io/docs/instrumenting/exposition_formats/">exposition formats</a>.</p>
+<h3 id="can-i-monitor-machines">Can I monitor machines?</h3>
+<p>Yes, the <a href="https://github.com/prometheus/node_exporter">Node Exporter</a> exposes an extensive set of machine-level metrics on Linux and other Unix systems such as CPU usage, memory, disk utilization, filesystem fullness, and network bandwidth.</p>
+<h3 id="can-i-monitor-network-devices">Can I monitor network devices?</h3>
+<p>Yes, the <a href="https://github.com/prometheus/snmp_exporter">SNMP Exporter</a> allows monitoring of devices that support SNMP.</p>
+<h3 id="can-i-monitor-batch-jobs">Can I monitor batch jobs?</h3>
+<p>Yes, using the <a href="https://prometheus.io/docs/instrumenting/pushing/">Pushgateway</a>. See also the <a href="https://prometheus.io/docs/practices/instrumentation/#batch-jobs">best practices</a> for monitoring batch jobs.</p>
+<h3 id="what-applications-can-prometheus-monitor-out-of-the-box">What applications can Prometheus monitor out of the box?</h3>
+<p>See <a href="https://prometheus.io/docs/instrumenting/exporters/">the list of exporters and integrations</a>.</p>
+<h3 id="can-i-monitor-jvm-applications-via-jmx">Can I monitor JVM applications via JMX?</h3>
+<p>Yes, for applications that you cannot instrument directly with the Java client, you can use the <a href="https://github.com/prometheus/jmx_exporter">JMX Exporter</a> either standalone or as a Java Agent.</p>
+<h3 id="what-is-the-performance-impact-of-instrumentation">What is the performance impact of instrumentation?</h3>
+<p>Performance across client libraries and languages may vary. For Java, <a href="https://github.com/prometheus/client_java/blob/master/benchmark/README.md">benchmarks</a> indicate that incrementing a counter/gauge with the Java client will take 12-17ns, depending on contention. This is negligible for all but the most latency-critical code.</p>
+<h2 id="故障排除">故障排除</h2>
+<h3 id="我的-prometheus-1x-server-需要很长时间才能启动并且会向日志中发送有关崩溃恢复的大量信息的垃圾邮件">我的 Prometheus 1.x server 需要很长时间才能启动，并且会向日志中发送有关崩溃恢复的大量信息的垃圾邮件。</h3>
+<p>You are suffering from an unclean shutdown. Prometheus has to shut down cleanly after a <code>SIGTERM</code>, which might take a while for heavily used servers. If the server crashes or is killed hard (e.g. OOM kill by the kernel or your runlevel system got impatient while waiting for Prometheus to shutdown), a crash recovery has to be performed, which should take less than a minute under normal circumstances, but can take quite long under certain circumstances. See <a href="https://prometheus.io/docs/prometheus/1.8/storage/#crash-recovery">crash recovery</a> for details.</p>
+<h3 id="my-prometheus-1x-server-runs-out-of-memory">My Prometheus 1.x server runs out of memory.</h3>
+<p>See <a href="https://prometheus.io/docs/prometheus/1.8/storage/#memory-usage">the section about memory usage</a> to configure Prometheus for the amount of memory you have available.</p>
+<h3 id="my-prometheus-1x-server-reports-to-be-in-rushed-mode-or-that-storage-needs-throttling">My Prometheus 1.x server reports to be in “rushed mode” or that “storage needs throttling”.</h3>
+<p>Your storage is under heavy load. Read <a href="https://prometheus.io/docs/prometheus/1.8/storage/">the section about configuring the local storage</a> to find out how you can tweak settings for better performance.</p>
+<h2 id="implementation">Implementation</h2>
+<h3 id="why-are-all-sample-values-64-bit-floats-i-want-integers">Why are all sample values 64-bit floats? I want integers.</h3>
+<p>We restrained ourselves to 64-bit floats to simplify the design. The <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">IEEE 754 double-precision binary floating-point format</a> supports integer precision for values up to 253. Supporting native 64 bit integers would (only) help if you need integer precision above 253 but below 263. In principle, support for different sample value types (including some kind of big integer, supporting even more than 64 bit) could be implemented, but it is not a priority right now. A counter, even if incremented one million times per second, will only run into precision issues after over 285 years.</p>
+<h3 id="why-dont-the-prometheus-server-components-support-tls-or-authentication-can-i-add-those">Why don&rsquo;t the Prometheus server components support TLS or authentication? Can I add those?</h3>
+<p>Note: The Prometheus team has changed their stance on this during its development summit on August 11, 2018, and support for TLS and authentication in serving endpoints is now on the <a href="https://prometheus.io/docs/introduction/roadmap/#tls-and-authentication-in-http-serving-endpoints">project&rsquo;s roadmap</a>. This document will be updated once code changes have been made.</p>
+<p>While TLS and authentication are frequently requested features, we have intentionally not implemented them in any of Prometheus&rsquo;s server-side components. There are so many different options and parameters for both (10+ options for TLS alone) that we have decided to focus on building the best monitoring system possible rather than supporting fully generic TLS and authentication solutions in every server component.</p>
+<p>If you need TLS or authentication, we recommend putting a reverse proxy in front of Prometheus. See, for example <a href="https://www.robustperception.io/adding-basic-auth-to-prometheus-with-nginx/">Adding Basic Auth to Prometheus with Nginx</a>.</p>
+<p>This applies only to inbound connections. Prometheus does support <a href="https://prometheus.io/docs/operating/configuration/#">scraping TLS- and auth-enabled targets</a>, and other Prometheus components that create outbound connections have similar support.</p>
+
+	
+	
+	<div class="text-muted mt-5 pt-3 border-top">最后修改 2020-07-25 18:12PM Sat
+</div>
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>

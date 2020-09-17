@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.74.3" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>Init 容器 | Website</title><meta property="og:title" content="Init 容器" />
+<meta property="og:description" content="本页提供了 Init 容器的概览：它是一种专用的容器，在 Pod 内的应用容器启动之前运行。Init 容器包括一些应用镜像中不存在的实用工具和安装脚本。
+你可以在 Pod 的规格信息中与 containers 数组（应用容器的描述）同级的位置指定 Init 容器。
+理解 Init 容器 Pod 可以包含多个容器，应用运行在这些容器里面，同时 Pod 也可以有一个或多个先于应用容器启动的 Init 容器。
+Init 容器与普通容器完全一样，除了如下两点：
+ Init 容器始终会运行到完成状态。 每个 init 容器必须成功完成才能启动下一个容器。  如果 Pod 的 Init 容器失败，Kubernetes 会不断地重启该 Pod，直到 Init 容器成功为止。然而，如果 Pod 对应的 restartPolicy 值为 Never，它不会重新启动。
+为 Pod 指定 Init 容器，需要在 Pod 的 spec 中添加 initContainers 字段， 该字段內以Container 类型对象数组的形式组织，和应用的 containers 数组同级相邻。 Init 容器的状态在 status.initContainerStatuses 字段中以容器状态数组的格式返回（类似 status.containerStatuses 字段）。
+与普通容器的不同之处 Init 容器支持应用容器的全部字段和特性，包括资源限制、数据卷和安全设置。 然而，Init 容器对资源请求和限制的处理稍有不同，在下面 资源 处有说明。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/docs/kubernetes/concepts/workloads/pods/init-containers/" />
+<meta property="article:published_time" content="2020-07-23T16:43:26+08:00" />
+<meta property="article:modified_time" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="name" content="Init 容器">
+<meta itemprop="description" content="本页提供了 Init 容器的概览：它是一种专用的容器，在 Pod 内的应用容器启动之前运行。Init 容器包括一些应用镜像中不存在的实用工具和安装脚本。
+你可以在 Pod 的规格信息中与 containers 数组（应用容器的描述）同级的位置指定 Init 容器。
+理解 Init 容器 Pod 可以包含多个容器，应用运行在这些容器里面，同时 Pod 也可以有一个或多个先于应用容器启动的 Init 容器。
+Init 容器与普通容器完全一样，除了如下两点：
+ Init 容器始终会运行到完成状态。 每个 init 容器必须成功完成才能启动下一个容器。  如果 Pod 的 Init 容器失败，Kubernetes 会不断地重启该 Pod，直到 Init 容器成功为止。然而，如果 Pod 对应的 restartPolicy 值为 Never，它不会重新启动。
+为 Pod 指定 Init 容器，需要在 Pod 的 spec 中添加 initContainers 字段， 该字段內以Container 类型对象数组的形式组织，和应用的 containers 数组同级相邻。 Init 容器的状态在 status.initContainerStatuses 字段中以容器状态数组的格式返回（类似 status.containerStatuses 字段）。
+与普通容器的不同之处 Init 容器支持应用容器的全部字段和特性，包括资源限制、数据卷和安全设置。 然而，Init 容器对资源请求和限制的处理稍有不同，在下面 资源 处有说明。">
+<meta itemprop="datePublished" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="dateModified" content="2020-07-23T16:43:26+08:00" />
+<meta itemprop="wordCount" content="635">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Init 容器"/>
+<meta name="twitter:description" content="本页提供了 Init 容器的概览：它是一种专用的容器，在 Pod 内的应用容器启动之前运行。Init 容器包括一些应用镜像中不存在的实用工具和安装脚本。
+你可以在 Pod 的规格信息中与 containers 数组（应用容器的描述）同级的位置指定 Init 容器。
+理解 Init 容器 Pod 可以包含多个容器，应用运行在这些容器里面，同时 Pod 也可以有一个或多个先于应用容器启动的 Init 容器。
+Init 容器与普通容器完全一样，除了如下两点：
+ Init 容器始终会运行到完成状态。 每个 init 容器必须成功完成才能启动下一个容器。  如果 Pod 的 Init 容器失败，Kubernetes 会不断地重启该 Pod，直到 Init 容器成功为止。然而，如果 Pod 对应的 restartPolicy 值为 Never，它不会重新启动。
+为 Pod 指定 Init 容器，需要在 Pod 的 spec 中添加 initContainers 字段， 该字段內以Container 类型对象数组的形式组织，和应用的 containers 数组同级相邻。 Init 容器的状态在 status.initContainerStatuses 字段中以容器状态数组的格式返回（类似 status.containerStatuses 字段）。
+与普通容器的不同之处 Init 容器支持应用容器的全部字段和特性，包括资源限制、数据卷和安全设置。 然而，Init 容器对资源请求和限制的处理稍有不同，在下面 资源 处有说明。"/>
+
+
+
+
+
+<link rel="preload" href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" as="style">
+<link href="/scss/main.min.eb8a7e86ba897f8566b703828c07e55ead0b19fa8ee4f0182858858fdc11873b.css" rel="stylesheet" integrity="">
+
+
+<script
+  src="/js/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+
+<script
+  src="/js/lunr-2.3.8.min.js"
+  integrity="sha384-vRQ9bDyE0Wnu+lMfm57BlYLO0/XauFuKpVsZPs7KEDwYKktWi5+Kz3MP8++DFlRY"
+  crossorigin="anonymous"></script>
+
+
+
+  </head>
+  <body class="td-page">
+    <header>
+      
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+  <a class="navbar-brand" href="/">
+    <span class="navbar-logo">
+      
+    </span>
+    <span class="font-weight-bold">Website</span>
+  </a>
+  <div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
+    <ul class="navbar-nav mt-2 mt-lg-0">
+      
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/docs" >
+            <span>Documentation</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/blog" >
+            <span>Blogs</span>
+          </a>
+        </li>
+      
+        <li class="nav-item mr-4 mb-2 mb-lg-0">
+          
+          
+          
+          
+          <a class="nav-link" href="/about" >
+            <span>About</span>
+          </a>
+        </li>
+      
+      
+      
+      
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link" href="https://github.com/luohu1/website" target="_blank">GitHub</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="navbar-nav d-none d-lg-block">
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+</div>
+</nav>
+
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+            
+
+
+
+
+<div id="td-sidebar-menu" class="td-sidebar__inner">
+  
+  <form class="td-sidebar__search d-flex align-items-center">
+    
+
+
+<input
+  type="search"
+  class="form-control td-search-input"
+  placeholder="&#xf002; Search"
+  aria-label="Search"
+  autocomplete="off"
+  
+  data-offline-search-index-json-src="/offline-search-index.6c4dc6afa969caf14e1a2ac5591cc16dfb94f805f7ad272b5b9a087439410f130fd68c76708656184a2815a7b45938f70b38b713d732a1fd794c0a25e40ad0d1.json"
+  data-offline-search-base-href="/"
+  data-offlnie-search-max-results="10"
+>
+
+
+    <button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type="button" data-toggle="collapse" data-target="#td-section-nav" aria-controls="td-docs-nav" aria-expanded="false" aria-label="Toggle section navigation">
+    </button>
+  </form>
+  
+  <nav class="collapse td-sidebar-nav" id="td-section-nav">
+    
+    
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Documentation</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docs">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Kubernetes 文档</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetes">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Concepts</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconcepts">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/overview/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Overview</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptsoverview">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewkubenetes-components" href="/docs/kubernetes/concepts/overview/kubenetes-components/">Kubernetes Components</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsoverviewwhat-is-kubernetes" href="/docs/kubernetes/concepts/overview/what-is-kubernetes/">What is Kubernetes?</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/cluster-architecture/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Cluster Architecture</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docskubernetesconceptscluster-architecture">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptscluster-architecturecontrollers" href="/docs/kubernetes/concepts/cluster-architecture/controllers/">Controllers</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/" class="align-left pl-0 pr-2 td-sidebar-link td-sidebar-link__section">Workloads</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloads">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/kubernetes/concepts/workloads/pods/" class="align-left pl-0 pr-2 active td-sidebar-link td-sidebar-link__section">Pods</a>
+  </li>
+  <ul>
+    <li class="collapse show" id="docskubernetesconceptsworkloadspods">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-overview" href="/docs/kubernetes/concepts/workloads/pods/pod-overview/">Pod Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspods" href="/docs/kubernetes/concepts/workloads/pods/pods/">Pods</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-lifecycle" href="/docs/kubernetes/concepts/workloads/pods/pod-lifecycle/">Pod Lifecycle</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page  active" id="m-docskubernetesconceptsworkloadspodsinit-containers" href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-preset" href="/docs/kubernetes/concepts/workloads/pods/pod-preset/">Pod Preset</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodspod-topology-spread-constraints" href="/docs/kubernetes/concepts/workloads/pods/pod-topology-spread-constraints/">Pod 拓扑扩展约束</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docskubernetesconceptsworkloadspodsdisruptions" href="/docs/kubernetes/concepts/workloads/pods/disruptions/">干扰（Disruptions）</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Prometheus</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheus">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/prometheus/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsprometheusintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionoverview" href="/docs/prometheus/introduction/overview/">Overview</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfirst-steps" href="/docs/prometheus/introduction/first-steps/">First Steps</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductioncomparison-to-alternatives" href="/docs/prometheus/introduction/comparison-to-alternatives/">Comparison to Alternatives</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsprometheusintroductionfaq" href="/docs/prometheus/introduction/faq/">Frequently Asked Questions</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Envoy</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoy">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/envoy/introduction/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Introduction</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsenvoyintroduction">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsenvoyintroductionwhat-is-envoy" href="/docs/envoy/introduction/what-is-envoy/">What is Envoy</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">Jenkins</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkins">
+      
+      
+      
+      
+      
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/docs/jenkins/user-handbook/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">User Handbook</a>
+  </li>
+  <ul>
+    <li class="collapse " id="docsjenkinsuser-handbook">
+      
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookinstalling-jenkins" href="/docs/jenkins/user-handbook/installing-jenkins/">Installing Jenkins</a>
+      
+      
+      
+      
+      
+      <a class="td-sidebar-link td-sidebar-link__page " id="m-docsjenkinsuser-handbookoverview" href="/docs/jenkins/user-handbook/overview/">User Handbook Overview</a>
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+      
+      
+    </li>
+  </ul>
+</ul>
+
+  </nav>
+</div>
+
+
+
+
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            
+
+
+
+
+
+
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+
+
+
+
+
+<a href="https://github.com/luohu1/website/edit/master/content/zh/docs/kubernetes/concepts/workloads/pods/init-containers.md" target="_blank"><i class="fa fa-edit fa-fw"></i> Edit on GitHub</a>
+<a href="https://github.com/luohu1/website/issues/new?title=Init%20%e5%ae%b9%e5%99%a8" target="_blank"><i class="fab fa-github fa-fw"></i> Report issues</a>
+
+</div>
+
+
+
+
+
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#理解-init-容器">理解 Init 容器</a>
+      <ul>
+        <li><a href="#与普通容器的不同之处">与普通容器的不同之处</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用-init-容器">使用 Init 容器</a>
+      <ul>
+        <li><a href="#示例">示例</a></li>
+        <li><a href="#使用-init-容器-1">使用 Init 容器</a></li>
+      </ul>
+    </li>
+    <li><a href="#具体行为">具体行为</a>
+      <ul>
+        <li><a href="#资源">资源</a></li>
+        <li><a href="#pod-重启的原因">Pod 重启的原因</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+          </div>
+          <main class="col-12 col-md-9 col-xl-8 pl-md-5" role="main">
+            
+  
+
+            <nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
+	<ol class="breadcrumb spb-1">
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/">Documentation</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/">Kubernetes 文档</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/">Concepts</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/">Workloads</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item" >
+	<a href="/docs/kubernetes/concepts/workloads/pods/">Pods</a>
+</li>
+
+
+
+
+<li class="breadcrumb-item active" aria-current="page">
+	<a href="/docs/kubernetes/concepts/workloads/pods/init-containers/">Init 容器</a>
+</li>
+
+	</ol>
+</nav	>
+
+            
+<div class="td-content">
+	<h1>Init 容器</h1>
+    
+	       
+	<p>本页提供了 Init 容器的概览：它是一种专用的容器，在 <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/">Pod</a> 内的应用容器启动之前运行。Init 容器包括一些应用镜像中不存在的实用工具和安装脚本。</p>
+<p>你可以在 Pod 的规格信息中与 <code>containers</code> 数组（应用容器的描述）同级的位置指定 Init 容器。</p>
+<h2 id="理解-init-容器">理解 Init 容器</h2>
+<p><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/">Pod</a> 可以包含多个容器，应用运行在这些容器里面，同时 Pod 也可以有一个或多个先于应用容器启动的 Init 容器。</p>
+<p>Init 容器与普通容器完全一样，除了如下两点：</p>
+<ul>
+<li>Init 容器始终会运行到完成状态。</li>
+<li>每个 init 容器必须成功完成才能启动下一个容器。</li>
+</ul>
+<p>如果 Pod 的 Init 容器失败，Kubernetes 会不断地重启该 Pod，直到 Init 容器成功为止。然而，如果 Pod 对应的 <code>restartPolicy</code> 值为 Never，它不会重新启动。</p>
+<p>为 Pod 指定 Init 容器，需要在 Pod 的 spec 中添加 <code>initContainers</code> 字段， 该字段內以<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#container-v1-core">Container</a> 类型对象数组的形式组织，和应用的 <code>containers</code> 数组同级相邻。 Init 容器的状态在 <code>status.initContainerStatuses</code> 字段中以容器状态数组的格式返回（类似 <code>status.containerStatuses</code> 字段）。</p>
+<h3 id="与普通容器的不同之处">与普通容器的不同之处</h3>
+<p>Init 容器支持应用容器的全部字段和特性，包括资源限制、数据卷和安全设置。 然而，Init 容器对资源请求和限制的处理稍有不同，在下面 <a href="https://kubernetes.io/zh/docs/concepts/workloads/pods/init-containers/#%E8%B5%84%E6%BA%90">资源</a> 处有说明。</p>
+<p>同时 Init 容器不支持 <code>lifecycle</code>、 <code>livenessProbe</code>、<code>readinessProbe</code> 或 <code>startupProbe</code>，因为它们必须在 Pod 就绪之前运行完成。</p>
+<p>如果为一个 Pod 指定了多个 Init 容器，kubelet 会按顺序逐个运行这些容器。每个 Init 容器必须运行成功，下一个才能够运行。当所有的 Init 容器运行完成时，Kubernetes 才会为 Pod 初始化应用容器并像平常一样运行。</p>
+<h2 id="使用-init-容器">使用 Init 容器</h2>
+<p>因为 Init 容器具有与应用容器分离的单独镜像，因此他们在启动相关代码方面具有一些优势：</p>
+<ul>
+<li>Init 容器可以包含一些安装过程中应用容器中不存在的实用工具或个性化代码。例如，没有必要仅为了在安装过程中使用类似 <code>sed</code>、 <code>awk</code>、 <code>python</code> 或 <code>dig</code> 这样的工具而去 <code>FROM</code> 一个镜像来生成一个新的镜像。</li>
+<li>应用镜像的构建者和部署者可以各自独立工作，而没有必要联合构建一个单独的应用镜像。</li>
+<li>Init 容器能以不同于Pod内应用容器的文件系统视图运行。因此，Init 容器可具有访问 <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secrets</a> 的权限，而应用容器不能够访问。</li>
+<li>由于 Init 容器必须在应用容器启动之前运行完成，因此 Init 容器提供了一种机制来阻塞或延迟应用容器的启动，直到满足了一组先决条件。一旦前置条件满足，Pod内的所有的应用容器会并行启动。</li>
+<li>Init 容器可以安全地运行这些工具，避免这些工具导致应用镜像的安全性降低。通过将不必要的工具分开，您可以限制应用容器镜像的攻击面。</li>
+</ul>
+<h3 id="示例">示例</h3>
+<p>下面是一些如何使用 Init 容器的想法：</p>
+<ul>
+<li>
+<p>等待一个 <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Service</a> 完成创建，通过类似如下的单行 shell 命令：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#a2f;font-weight:bold">for</span> i in <span style="color:#666">{</span>1..100<span style="color:#666">}</span>; <span style="color:#a2f;font-weight:bold">do</span> sleep 1; <span style="color:#a2f;font-weight:bold">if</span> dig myservice; <span style="color:#a2f;font-weight:bold">then</span> <span style="color:#a2f">exit</span> 0; <span style="color:#a2f;font-weight:bold">fi</span>; <span style="color:#a2f;font-weight:bold">done</span>; <span style="color:#a2f">exit</span> <span style="color:#666">1</span>
+</code></pre></div></li>
+<li>
+<p>注册这个 Pod 到远程服务器，通过在命令中调用 API，类似如下：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -X POST http://<span style="color:#b8860b">$MANAGEMENT_SERVICE_HOST</span>:<span style="color:#b8860b">$MANAGEMENT_SERVICE_PORT</span>/register -d <span style="color:#b44">&#39;instance=$(&lt;POD_NAME&gt;)&amp;ip=$(&lt;POD_IP&gt;)&#39;</span>
+</code></pre></div></li>
+<li>
+<p>在启动应用容器之前等一段时间，使用类似命令：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sleep <span style="color:#666">60</span> 
+</code></pre></div></li>
+<li>
+<p>克隆 Git 仓库到 <a href="https://kubernetes.io/docs/concepts/storage/volumes/">Volume</a>。</p>
+</li>
+<li>
+<p>将配置值放到配置文件中，运行模板工具为主应用容器动态地生成配置文件。例如，在配置文件中存放 <code>POD_IP</code> 值，并使用 Jinja 生成主应用配置文件。</p>
+</li>
+</ul>
+<h3 id="使用-init-容器-1">使用 Init 容器</h3>
+<p>下面的例子定义了一个具有 2 个 Init 容器的简单 Pod。第一个等待 <code>myservice</code> 启动，第二个等待 <code>mydb</code> 启动。 一旦这两个 Init容器 都启动完成，Pod 将启动 <code>spec</code> 区域中的应用容器。</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#a2f;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Pod<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>myapp-pod<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">labels</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">app</span>:<span style="color:#bbb"> </span>myapp<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">containers</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>myapp-container<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">image</span>:<span style="color:#bbb"> </span>busybox:<span style="color:#666">1.28</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">command</span>:<span style="color:#bbb"> </span>[<span style="color:#b44">&#39;sh&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;-c&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;echo The app is running! &amp;&amp; sleep 3600&#39;</span>]<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">initContainers</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>init-myservice<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">image</span>:<span style="color:#bbb"> </span>busybox:<span style="color:#666">1.28</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">command</span>:<span style="color:#bbb"> </span>[<span style="color:#b44">&#39;sh&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;-c&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#34;until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done&#34;</span>]<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>init-mydb<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">image</span>:<span style="color:#bbb"> </span>busybox:<span style="color:#666">1.28</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">command</span>:<span style="color:#bbb"> </span>[<span style="color:#b44">&#39;sh&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#39;-c&#39;</span>,<span style="color:#bbb"> </span><span style="color:#b44">&#34;until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done&#34;</span>]<span style="color:#bbb">
+</span></code></pre></div><p>您可以通过运行以下命令启动此Pod：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f myapp.yaml
+pod/myapp-pod created
+</code></pre></div><p>并使用以下命令检查其状态：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get -f myapp.yaml
+NAME        READY     STATUS     RESTARTS   AGE
+myapp-pod   0/1       Init:0/2   <span style="color:#666">0</span>          6m
+</code></pre></div><p>或了解更多详情：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl describe -f myapp.yaml
+Name:          myapp-pod
+Namespace:     default
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+Labels:        <span style="color:#b8860b">app</span><span style="color:#666">=</span>myapp
+Status:        Pending
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+Init Containers:
+  init-myservice:
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+    State:         Running
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+  init-mydb:
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+    State:         Waiting
+      Reason:      PodInitializing
+    Ready:         False
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+Containers:
+  myapp-container:
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+    State:         Waiting
+      Reason:      PodInitializing
+    Ready:         False
+<span style="color:#666">[</span>...<span style="color:#666">]</span>
+Events:
+  FirstSeen    LastSeen    Count    From                      SubObjectPath                           Type          Reason        Message
+  ---------    --------    -----    ----                      -------------                           --------      ------        -------
+  16s          16s         <span style="color:#666">1</span>        <span style="color:#666">{</span>default-scheduler <span style="color:#666">}</span>                                              Normal        Scheduled     Successfully assigned myapp-pod to 172.17.4.201
+  16s          16s         <span style="color:#666">1</span>        <span style="color:#666">{</span>kubelet 172.17.4.201<span style="color:#666">}</span>    spec.initContainers<span style="color:#666">{</span>init-myservice<span style="color:#666">}</span>     Normal        Pulling       pulling image <span style="color:#b44">&#34;busybox&#34;</span>
+  13s          13s         <span style="color:#666">1</span>        <span style="color:#666">{</span>kubelet 172.17.4.201<span style="color:#666">}</span>    spec.initContainers<span style="color:#666">{</span>init-myservice<span style="color:#666">}</span>     Normal        Pulled        Successfully pulled image <span style="color:#b44">&#34;busybox&#34;</span>
+  13s          13s         <span style="color:#666">1</span>        <span style="color:#666">{</span>kubelet 172.17.4.201<span style="color:#666">}</span>    spec.initContainers<span style="color:#666">{</span>init-myservice<span style="color:#666">}</span>     Normal        Created       Created container with docker id 5ced34a04634; Security:<span style="color:#666">[</span><span style="color:#b8860b">seccomp</span><span style="color:#666">=</span>unconfined<span style="color:#666">]</span>
+  13s          13s         <span style="color:#666">1</span>        <span style="color:#666">{</span>kubelet 172.17.4.201<span style="color:#666">}</span>    spec.initContainers<span style="color:#666">{</span>init-myservice<span style="color:#666">}</span>     Normal        Started       Started container with docker id 5ced34a04634
+</code></pre></div><p>如需查看 Pod 内 Init 容器的日志，请执行:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl logs myapp-pod -c init-myservice <span style="color:#080;font-style:italic"># Inspect the first init container</span>
+$ kubectl logs myapp-pod -c init-mydb      <span style="color:#080;font-style:italic"># Inspect the second init container</span>
+</code></pre></div><p>此时，Init 容器将会等待至发现名称为 <code>mydb</code> 和 <code>myservice</code> 的 Service。</p>
+<p>如下为创建这些 Service 的配置文件：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Service<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>myservice<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">ports</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#a2f;font-weight:bold">protocol</span>:<span style="color:#bbb"> </span>TCP<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">port</span>:<span style="color:#bbb"> </span><span style="color:#666">80</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">targetPort</span>:<span style="color:#bbb"> </span><span style="color:#666">9376</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span>---<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>v1<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>Service<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">metadata</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">name</span>:<span style="color:#bbb"> </span>mydb<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#a2f;font-weight:bold">spec</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#a2f;font-weight:bold">ports</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- <span style="color:#a2f;font-weight:bold">protocol</span>:<span style="color:#bbb"> </span>TCP<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">port</span>:<span style="color:#bbb"> </span><span style="color:#666">80</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#a2f;font-weight:bold">targetPort</span>:<span style="color:#bbb"> </span><span style="color:#666">9377</span><span style="color:#bbb">
+</span></code></pre></div><p>创建 <code>mydb</code> 和 <code>myservice</code> service 的命令：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl create -f services.yaml
+service/myservice created
+service/mydb created
+</code></pre></div><p>然后，您将能看到这些 Init 容器执行完毕，并且 <code>my-app</code> Pod 进入了 Running 状态：</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get -f myapp.yaml
+NAME        READY     STATUS    RESTARTS   AGE
+myapp-pod   1/1       Running   <span style="color:#666">0</span>          9m
+</code></pre></div><p>这个简单的例子应该能为你创建自己的 Init 容器提供一些启发。 <a href="https://kubernetes.io/zh/docs/concepts/workloads/pods/init-containers/#what-s-next">What&rsquo;s next</a> 部分提供了更详细例子的链接。</p>
+<h2 id="具体行为">具体行为</h2>
+<p>在 Pod 启动过程中，kubelet 会延迟运行 Init 容器，直到网络和存储就绪为止。然后，kubelet 按照 Pod 规范中出现的顺序运行 Pod 的 Init 容器。</p>
+<p>每个 Init 容器成功退出后才会启动下一个 Init容器。如果应为运行或退出时失败引发容器启动失败，它会根据 Pod 的 <code>restartPolicy</code> 策略进行重试。然而，如果 Pod 的 <code>restartPolicy</code> 设置为 Always，Init 容器失败时会使用 <code>restartPolicy</code> 的 OnFailure 策略。</p>
+<p>在所有的 Init 容器没有成功之前，Pod 将不会变成  <code>Ready</code> 状态。Init 容器的端口将不会在 Service 中进行聚集。 正在初始化中的 Pod 处于 <code>Pending</code> 状态，但会将条件 <code>Initializing</code> 设置为 true。</p>
+<p>如果 Pod <a href="https://kubernetes.io/zh/docs/concepts/workloads/pods/init-containers/#pod-restart-reasons">重启</a>，所有 Init 容器必须重新执行。</p>
+<p>对 Init 容器 spec 的修改仅限于容器的 image 字段。更改 Init 容器的 image 字段，等同于重启该 Pod。</p>
+<p>因为 Init 容器可能会被重启、重试或者重新执行，所以 Init 容器的代码应该是幂等的。 特别地，基于 <code>EmptyDirs</code> 写文件的代码，应该对输出文件可能已经存在做好准备。</p>
+<p>Init 容器具有应用容器的所有字段。 然而 Kubernetes 禁止使用 <code>readinessProbe</code>，因为 Init 容器不能定义不同于完成（completion）的就绪（readiness）。 这一点会在校验时强制执行。</p>
+<p>在 Pod 上使用 <code>activeDeadlineSeconds</code>和在容器上使用 <code>livenessProbe</code> 可以避免 Init 容器一直重复失败。 <code>activeDeadlineSeconds</code> 时间包含了 Init 容器启动的时间。</p>
+<p>在 Pod 中的每个应用容器和 Init 容器的名称必须唯一；与任何其它容器共享同一个名称，会在校验时抛出错误。</p>
+<h3 id="资源">资源</h3>
+<p>给定 Init 容器的执行顺序下，资源使用适用于如下规则：</p>
+<ul>
+<li>所有 Init 容器上定义的对任何特定资源的 request 或 limit 的最大值，作为 <em>有效的初始 request/limit</em></li>
+<li>Pod 对资源的有效 request/limit 是如下两者的较大者：
+<ul>
+<li>所有应用容器对某个资源的 request/limit 之和</li>
+<li>对某个资源的有效初始 request/limit</li>
+</ul>
+</li>
+<li>基于有效 limit/request 完成调度，这意味着 Init 容器能够为初始化过程预留资源，这些资源在 Pod 生命周期过程中并没有被使用。</li>
+<li>Pod 的 <em>有效 QoS 层</em> ，与 Init 容器和应用容器的一样。</li>
+</ul>
+<p>配额和限制将根据有效的 Pod request 和 limit 进行应用。</p>
+<p>Pod 级别的 cgroups 是基于有效 Pod 的 request 和 limit，和调度器相同。</p>
+<h3 id="pod-重启的原因">Pod 重启的原因</h3>
+<p>Pod 重启导致 Init 容器重新执行，主要有如下几个原因：</p>
+<ul>
+<li>用户更新 Pod 的 Spec 导致 Init 容器镜像发生改变。Init 容器镜像的变更会引起 Pod 重启. 应用容器镜像的变更仅会重启应用容器。</li>
+<li>Pod 的基础设施容器（译者注：如 pause 容器）被重启。这种情况不多见，必须由具备Node root 权限访问的人员来完成。</li>
+<li>当 <code>restartPolicy</code> 设置为 Always，Pod 中所有容器会终止而强制重启，由于垃圾收集导致 Init 容器的完成记录丢失。</li>
+</ul>
+
+	
+	
+	<div class="text-muted mt-5 pt-3 border-top">最后修改 2020-07-23 16:43PM Thu
+</div>
+</div>
+
+
+          </main>
+        </div>
+      </div>
+      
+<footer class="bg-dark py-5 row d-print-none">
+  <div class="container-fluid mx-sm-5">
+    <div class="row">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="User mailing list" aria-label="User mailing list">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fa fa-envelope"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+        
+        
+        
+<ul class="list-inline mb-0">
+  
+  <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
+    <a class="text-white" target="_blank" href="https://github.com/luohu1">
+      <i class="fab fa-github"></i>
+    </a>
+  </li>
+  
+</ul>
+
+        
+        
+      </div>
+      <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+        <small class="text-white">&copy; 2020 LH All Rights Reserved</small>
+        
+	
+		<p class="mt-2"><a href="/about/">About</a></p>
+	
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </div>
+    
+<script src="/js/popper-1.14.3.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="/js/bootstrap-4.1.3.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+<script src="/js/main.min.b6dfd66b2d261380250c517fd39bc9d8659709e9fc924b00d8fed92e8d9df768.js" integrity="sha256-tt/Way0mE4AlDFF/05vJ2GWXCen8kksA2P7ZLo2d92g=" crossorigin="anonymous"></script>
+
+
+
+  </body>
+</html>
